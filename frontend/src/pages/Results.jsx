@@ -1,31 +1,96 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import ResultsCard from '../components/ResultsCard'
 import Footer from '../components/Footer'
 import uclmccs from '../assets/uclmccs.png'
 import uclmpsits from '../assets/uclmpsits.png'
+import Button from '../components/Button'
 
 function Results() {
+    const navigate = useNavigate()
     const positions = [
         {
             title: "PRESIDENT",
             candidates: [
-                {text: "Daniel Kane Mapano - E.I Partylist", voteNum: 150, percentage: "69%"},
-                {text: "John Doe - PDP", voteNum: 150, percentage: "69%"}
+                { text: "Daniel Kane Mapano - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
             ]
         },
         {
             title: "VP - INTERNAL",
             candidates: [
-                {text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%"},
-                {text: "John Doe - PDP", voteNum: 150, percentage: "69%"}
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "100      %" }
             ]
         },
         {
             title: "VP - EXTERNAL",
             candidates: [
-                {text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%"},
-                {text: "John Doe - PDP", voteNum: 150, percentage: "69%"}
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        },
+        {
+            title: "SECRETARY",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        },
+        {
+            title: "PIO",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        },
+        {
+            title: "TREASURER",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        },
+        {
+            title: "CHIEF OF CREATIVES",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        },
+        {
+            title: "AUDITOR",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        },
+        {
+            title: "CHIEF OF REPRESENTATIVE",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        },
+        {
+            title: "CHIEF OF STUDENTS DEVELOPMENT",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        },
+        {
+            title: "ACADEMIC REPRESENTATIVE",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
+            ]
+        }, {
+            title: "CARES REPRESENTATIVE",
+            candidates: [
+                { text: "john Doe - E.I Partylist", voteNum: 150, percentage: "69%" },
+                { text: "John Doe - PDP", voteNum: 150, percentage: "69%" }
             ]
         }
     ]
@@ -58,7 +123,11 @@ function Results() {
                         </div>
                     ))}
                 </div>
+                <div className='flex items-center justify-center w-100 mx-auto my-18'>
+                    <Button onClick={() => navigate('/')}>Return to HomePage</Button>
+                </div>
             </main>
+
             <Footer />
         </div>
     )
