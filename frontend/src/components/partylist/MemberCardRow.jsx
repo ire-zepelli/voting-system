@@ -5,8 +5,6 @@ import MemberCard from "./MemberCard";
  * MemberCardRow
  *
  * Renders up to 5 member cards in a fan/stepped layout.
- * Center slot is tallest; outer slots step down in height.
- * Fewer than 5 members are auto-centred.
  *
  * Props:
  *  members      { name?, position, photo? }[]   max 5
