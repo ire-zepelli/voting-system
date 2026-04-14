@@ -1,8 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import MemberCardRow from "../components/partylist/MemberCardRow";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
-
 /**
  * PartyListDetail
  *
@@ -133,6 +132,45 @@ function Section({ section, isLast }) {
   );
 }
 
+// ─── Sticky Header ──────────────────────────────────────────────────────────────
+function StickyHeader() {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        padding: "2rem",
+        zIndex: 50,
+        pointerEvents: "none",
+      }}
+    >
+      <Link
+        to="/partylist"
+        className="flex items-center gap-3 text-white/80 hover:text-white transition-all duration-300 group whitespace-nowrap font-poppins text-[17px] tracking-tight no-underline"
+        style={{ pointerEvents: "auto" }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="w-5 h-5 opacity-80 group-hover:opacity-100 group-hover:-translate-x-1 transition-transform duration-300"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+          />
+        </svg>
+        Return To Partylist
+      </Link>
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function PartyListDetail() {
   return (
@@ -143,8 +181,11 @@ export default function PartyListDetail() {
         fontFamily: "'Arial', sans-serif",
         overflowX: "hidden",
         overflowY: "auto",
+        position: "relative",
       }}
     >
+      <StickyHeader />
+
       {SECTIONS.map((section, i) => (
         <Section
           key={section.title}
