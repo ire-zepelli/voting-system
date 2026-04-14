@@ -1,33 +1,33 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   return (
     <nav className="w-full font-poppins bg-transparent text-white/90">
       {/* Desktop */}
       <div className="hidden sm:flex items-center px-6 sm:px-10 py-8 gap-10 sm:gap-14">
         <Link
-          to="/"
-          className="flex items-center gap-3 hover:text-white transition-all duration-300 group whitespace-nowrap"
+          to="/" 
+          className={`flex items-center gap-3 hover:text-white transition-all duration-300 group whitespace-nowrap`}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-5 h-5 opacity-80 group-hover:opacity-100 group-hover:-translate-x-1 transition-transform duration-300"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-            />
-          </svg>
+          {!isHome && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-5 h-5 opacity-80 group-hover:opacity-100 group-hover:-translate-x-1 transition-transform duration-300"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+          )}
           <span className="text-[17px] font-normal tracking-tight">
-            Return to Home
+            {isHome ? "Home" : "Return to Home"}
           </span>
         </Link>
 

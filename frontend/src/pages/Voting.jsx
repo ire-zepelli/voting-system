@@ -55,7 +55,7 @@ export default function Voting() {
     {
       id: 1,
       position: "President",
-      title: "PRESIDENTS",
+      title: "PRESIDENT",
       candidates: [
         { id: 1, name: "Juan dela Cruz", image: test_candidate_picture },
         { id: 2, name: "Maria Santos", image: test_candidate_picture },
@@ -203,12 +203,12 @@ export default function Voting() {
       <FadeInOnScroll>
         <div className="flex flex-row justify-center gap-6 md:gap-12 mt-12 mb-24 w-full px-4">
           <div className="w-48 md:w-[250px]">
-            <Button className="font-bold text-lg pointer-events-auto shadow-xl hover:scale-105">
+            <Button className="">
               Back
             </Button>
           </div>
           <div className="w-48 md:w-[250px]">
-            <Button className="font-bold text-lg pointer-events-auto shadow-xl hover:scale-105">
+            <Button className="">
               Submit
             </Button>
           </div>
