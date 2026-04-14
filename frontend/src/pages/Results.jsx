@@ -28,7 +28,7 @@ function Results() {
     ]
 
     return (
-        <div className='bg-[#3B0B2E] min-h-screen'>
+        <div className='bg-[#3B0B2E]/98 min-h-screen'>
             <Header />
             <div className='w-full flex flex-col text-white px-20 py-10'>
                 <div className='flex flex-row gap-5 mb-5'>
