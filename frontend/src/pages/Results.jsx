@@ -31,7 +31,7 @@ function Results() {
     ]
 
     return (
-        <div className="min-h-screen flex flex-col font-inter overflow-x-hidden" style={{ backgroundColor: '#34102A' }}>
+        <div className='bg-[#3B0B2E]/98 min-h-screen'>
             <Header />
             <main className="flex-grow w-full max-w-[1440px] px-4 sm:px-8 md:px-16 py-6 fade-in-up box-border mx-auto">
                 <div className="flex gap-1 mb-1 items-center justify-start ml-1">
