@@ -4,6 +4,8 @@ import Landing from "./pages/Landing";
 import Voting from "./pages/Voting";
 import CandidatePoster from "./pages/CandidatePoster";
 import Results from "./pages/Results";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -13,6 +15,13 @@ function App() {
         <Route path="/voting" element={<Voting />} />
         <Route path="/candidate-poster" element={<CandidatePoster />} />
         <Route path="/results" element={<Results />} />
+        
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        {/* Temporary routes for now since there is no backend yet */}
+        <Route path="/login/not-signed-in" element={<Login />} />
+        <Route path="/login/timerexpired" element={<Login />} />
       </Routes>
     </>
   );
