@@ -32,7 +32,11 @@ function Header() {
         </Link>
 
         <Link
+<<<<<<< Updated upstream
           to="/partylist"
+=======
+          to="/candidate-poster"
+>>>>>>> Stashed changes
           className="text-[17px] font-normal mt-1 hover:text-[#FFA700] transition-all duration-300 pb-1 relative after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-[#FFA700] hover:after:w-full after:bottom-0 after:left-0 after:transition-all after:duration-300"
         >
           Candidates
@@ -95,11 +99,19 @@ function Header() {
         className={`sm:hidden flex flex-col items-center gap-5 overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-40 pb-6" : "max-h-0"}`}
       >
         <Link
+<<<<<<< Updated upstream
           to="/partylist"
           onClick={() => setMenuOpen(false)}
           className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
         >
           Candidate
+=======
+          to="/candidate-poster"
+          onClick={() => setMenuOpen(false)}
+          className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
+        >
+          Candidates
+>>>>>>> Stashed changes
         </Link>
         <Link
           to="/voting"
