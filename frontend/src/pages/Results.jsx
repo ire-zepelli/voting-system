@@ -111,7 +111,7 @@ function Results() {
                             <h2 className="text-[24px] sm:text-[28px] font-normal tracking-wide mb-4 whitespace-normal">{position.title}</h2>
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6 w-full">
                                 {position.candidates.map((candidate, candidateIndex) => (
-                                    <div key={candidateIndex} className="w-full truncate overflow-hidden bg-transparent">
+                                    <div key={candidateIndex} className="w-full bg-transparent">
                                         <ResultsCard
                                             text={candidate.text}
                                             voteNum={candidate.voteNum}
