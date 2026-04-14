@@ -1,6 +1,9 @@
 import React from 'react'
 import Header from '../components/Header'
 import ResultsCard from '../components/ResultsCard'
+import Footer from '../components/Footer'
+import uclmccs from '../assets/uclmccs.png'
+import uclmpsits from '../assets/uclmpsits.png'
 
 function Results() {
     const positions = [
@@ -30,34 +33,34 @@ function Results() {
     return (
         <div className='bg-[#3B0B2E]/98 min-h-screen'>
             <Header />
-            <div className='w-full flex flex-col text-white px-20 py-10'>
-                <div className='flex flex-row gap-5 mb-5'>
-                    <img src="" alt="CCS Logo" className='w-15 h-15 border border-black' />
-                    <img src="" alt="PSITS Logo" className='w-15 h-15 border border-black' />
+            <main className="flex-grow w-full max-w-[1440px] px-4 sm:px-8 md:px-16 py-6 fade-in-up box-border mx-auto">
+                <div className="flex gap-1 mb-1 items-center justify-start ml-1">
+                    <img src={uclmccs} alt="UCLM CCS Logo" className="w-[45px] h-auto object-contain" />
+                    <img src={uclmpsits} alt="UCLM PSITS Logo" className="w-[45px] h-auto object-contain" />
                 </div>
-                <h1 className='text-7xl font-bold'>Results:</h1>
+                <h1 className="text-[36px] sm:text-[46px] text-white font-bold tracking-tight mb-12">Results:</h1>
 
-                <div className='flex flex-col  m-5 mt-10'>
+                <div className="flex flex-col w-full text-white">
                     {positions.map((position, index) => (
-                        <div key={index}>
-                            <h1 className='text-5xl mt-10'>{position.title}</h1>
-                            <div className='flex flex-row gap-20 mt-5'>
+                        <div key={index} className="mb-10 w-full">
+                            <h2 className="text-[24px] sm:text-[28px] font-normal tracking-wide mb-4 whitespace-normal">{position.title}</h2>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6 w-full">
                                 {position.candidates.map((candidate, candidateIndex) => (
-                                    <ResultsCard
-                                        key={candidateIndex}
-                                        text={candidate.text}
-                                        voteNum={candidate.voteNum}
-                                        percentage={candidate.percentage}
-                                    />
+                                    <div key={candidateIndex} className="w-full truncate overflow-hidden bg-transparent">
+                                        <ResultsCard
+                                            text={candidate.text}
+                                            voteNum={candidate.voteNum}
+                                            percentage={candidate.percentage}
+                                        />
+                                    </div>
                                 ))}
                             </div>
                         </div>
                     ))}
                 </div>
-
-            </div>
+            </main>
+            <Footer />
         </div>
-
     )
 }
 

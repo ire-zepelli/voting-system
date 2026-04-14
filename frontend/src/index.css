@@ -1,2 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap');
 @import "tailwindcss";
-@config "../tailwind.config.js";
+
+:root {
+  --bg-color: #34102A;
+  --panel-bg: rgba(0, 0, 0, 0.2);
+  --input-bg: #411d43;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: white;
+  margin: 0;
+  min-height: 100vh;
+  letter-spacing: -0.02em;
+}
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-helvetica {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Base styles for the dark purple background that matches the design */
+body {
+  background-color: #34102A; /* Dark purple */
+  overflow-x: hidden;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
