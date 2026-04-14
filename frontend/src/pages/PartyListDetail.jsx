@@ -1,44 +1,67 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import MemberCardRow from "../components/partylist/MemberCardRow";
 import Footer from "../components/Footer";
-/**
- * PartyListDetail
- *
- * Single scrollable page. Each role group (EXECUTIVES, CHIEFS,
- * REPRESENTATIVES) occupies one full-viewport section.
- * No slider — just scroll.
- */
 
-const SECTIONS = [
-  {
-    title: "EXECUTIVES",
-    members: [
-      { position: "Secretary", photo: null },
-      { position: "VP-Internal", photo: null },
-      { position: "President", photo: null },
-      { position: "VP-External", photo: null },
-      { position: "Treasurer", photo: null },
-    ],
-  },
-  {
-    title: "CHIEFS",
-    members: [
-      { position: "Public Information Officer", photo: null },
-      { position: "Chief of Representative", photo: null },
-      { position: "Chief of Creatives", photo: null },
-      { position: "Auditor", photo: null },
-      { position: "Chief of Students Development", photo: null },
-    ],
-  },
-  {
-    title: "REPRESENTATIVES",
-    members: [
-      { position: "Academic Representative", photo: null },
-      { position: "CARES Representative", photo: null },
-    ],
-  },
-];
+const PARTY_DATA = {
+  beats: [
+    {
+      title: "EXECUTIVES",
+      members: [
+        { name: "May Lapeña", position: "Secretary", photo: "/BEATS/TRANSPARENT_INDIV/LAPENA_SECRETARY.png" },
+        { name: "Dan Pierre Pogoy", position: "Vice-President Internal", photo: "/BEATS/TRANSPARENT_INDIV/POGOY_VP_INTERNAL.png" },
+        { name: "Crista Monica Oscar", position: "President", photo: "/BEATS/TRANSPARENT_INDIV/OSCAR_PRES.png" },
+        { name: "Ryan Pacumio", position: "Vice-President External", photo: "/BEATS/TRANSPARENT_INDIV/PACUMIO_VP_EXTERNAL.png" },
+        { name: "Keith Ramises Latonio", position: "Treasurer", photo: "/BEATS/TRANSPARENT_INDIV/LATONIO_TREASURER.png" },
+      ],
+    },
+    {
+      title: "CHIEFS",
+      members: [
+        { name: "Fiona Monilar", position: "Public Information Officer", photo: "/BEATS/TRANSPARENT_INDIV/MONILAR_PIO.png" },
+        { name: "Jhoviegen Cuysona", position: "Chief of Representative", photo: "/BEATS/TRANSPARENT_INDIV/CUYSONA_CHIEF_OF_REP.png" },
+        { name: "Harry Conde", position: "Chief of Creatives", photo: "/BEATS/TRANSPARENT_INDIV/CONDE_CHIEF_OF_CREATIVES.png" },
+        { name: "Emmanuel Franz Apawan", position: "Auditor", photo: "/BEATS/TRANSPARENT_INDIV/APAWAN_AUDITOR.png" },
+        { name: "Aimee Gayle Cogal", position: "Chief of Students Development", photo: "/BEATS/TRANSPARENT_INDIV/COGAL_CHIEF_OF_STUDENTDEV.png" },
+      ],
+    },
+    {
+      title: "REPRESENTATIVES",
+      members: [
+        { name: "Rose Anne Resureccion", position: "Academic Representative", photo: "/BEATS/TRANSPARENT_INDIV/RESURRECCION_ACADEMIC_REP.png" },
+        { name: "Mary Grace Patalinghug", position: "CARES Representative", photo: "/BEATS/TRANSPARENT_INDIV/PATALINGHUG_CARE_REP.png" },
+      ],
+    },
+  ],
+  peak: [
+    {
+      title: "EXECUTIVES",
+      members: [
+        { name: "Diane Mendoza", position: "Secretary", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/SECRETARY - MENDOZA_.png" },
+        { name: "Altheia Dano", position: "Vice-President Internal", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP INTERNAL- DANO.png" },
+        { name: "Darren Villanueva", position: "President", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/PRES- VILLANUEVA_.png" },
+        { name: "Kane Huxley Book", position: "Vice-President External", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP EXTERNAL - BOOK.png" },
+        { name: "Hanny Jane Enriquez", position: "Treasurer", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/TREASURER - ENRIQUEZ_.png" },
+      ],
+    },
+    {
+      title: "CHIEFS",
+      members: [
+        { name: "Jea Mary Trixy Magalland", position: "Public Information Officer", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/P.I OFFICER- MAGALLANO.png" },
+        { name: "Abijah Shen Regado", position: "Chief of Representative", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/REPRESENTATIVE - REGADO.png" },
+        { name: "Tristhan Mark Vincent Villamor", position: "Chief of Creatives", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CREATIVES - VILLAMOR_.png" },
+        { name: "Myka Angela Dumael", position: "Auditor", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/AUDIT- DUMAEL.png" },
+        { name: "Jeoff Andrew Demecillo", position: "Chief of Students Development", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/DEVELOPMENT - DEMECILLO.png" },
+      ],
+    },
+    {
+      title: "REPRESENTATIVES",
+      members: [
+        { name: "Nathaniel Ornopia", position: "CARES Representative", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CARES REP- ORNOPIA.png" },
+      ],
+    },
+  ],
+};
 
 // ─── One full-viewport section ────────────────────────────────────────────────
 function Section({ section, isLast }) {
@@ -125,6 +148,7 @@ function Section({ section, isLast }) {
           <MemberCardRow
             members={section.members}
             rowHeight="clamp(260px, 42vh, 460px)"
+            showName={true}
           />
         </div>
       </section>
@@ -173,6 +197,10 @@ function StickyHeader() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function PartyListDetail() {
+  const { id } = useParams();
+  const partyId = id ? id.toLowerCase() : "beats";
+  const sections = PARTY_DATA[partyId] || PARTY_DATA.beats;
+
   return (
     <div
       style={{
@@ -186,11 +214,11 @@ export default function PartyListDetail() {
     >
       <StickyHeader />
 
-      {SECTIONS.map((section, i) => (
+      {sections.map((section, i) => (
         <Section
           key={section.title}
           section={section}
-          isLast={i === SECTIONS.length - 1}
+          isLast={i === sections.length - 1}
         />
       ))}
 

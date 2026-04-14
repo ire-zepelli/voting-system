@@ -10,7 +10,7 @@ const PARTYLISTS = [
   {
     id: "beats",
     label: "B.E.A.T.S.",
-    image: null,
+    image: "/BEATS/GROUP PHOTO/beatsgrouptransparent.png",
     bgColor: "#34102A",
     fullName: "",
     vision: "",
@@ -21,7 +21,7 @@ const PARTYLISTS = [
   {
     id: "peak",
     label: "P.E.A.K.",
-    image: null,
+    image: "/PEAK/GROUP PHOTO/peakgrouptransparent.png",
     bgColor: "#34102A",
     fullName: "",
     vision: "",
@@ -89,6 +89,7 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
       style={{
         position: "relative",
         flex: 1,
+        minHeight: "80vh", // Massive sections to fit the photos
         overflow: "hidden",
         background: party.bgColor, // Unimplement darkening
         cursor: "pointer",
@@ -105,12 +106,12 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
           position: "absolute",
           top: "50%",
           left: "2rem",
-          transform: isHovered 
+          transform: isHovered
             ? "translate(10%, -50%) scale(2.2)" // Use transform scale for buttery smooth animation
             : "translate(0%, -50%) scale(1)",
           transformOrigin: "left center",
-          zIndex: 1,
-          fontSize: "clamp(5rem,15vw,12rem)",
+          zIndex: isHovered ? 1 : 10,
+          fontSize: "clamp(8rem,20vw,16rem)", // Enlarged texts
           fontWeight: "bold",
           fontFamily: "Inter, sans-serif",
           color: isHovered ? "rgba(255,255,255,0.08)" : "#ffffff",
@@ -133,11 +134,12 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
           bottom: 0,
           width: isHovered ? "100%" : "60%",
           height: "100%",
-          zIndex: 2,
+          zIndex: isHovered ? 10 : 1,
           display: "flex",
           justifyContent: isHovered ? "center" : "flex-end",
           transition: "width 0.8s cubic-bezier(0.25, 1, 0.5, 1), justify-content 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
           willChange: "width",
+          pointerEvents: "none",
         }}
       >
         {party.image ? (
@@ -145,10 +147,13 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
             src={party.image}
             alt={`${party.label} partylist`}
             style={{
-              height: "100%",
-              width: isHovered ? "70%" : "100%",
-              objectFit: "cover",
-              objectPosition: "top center",
+              height: isHovered ? "110%" : "95%",
+              width: isHovered ? "80%" : "100%", // When hovered, it occupies 80% of center space.
+              objectFit: "contain", // Reverted to contain so no cropping occurs
+              objectPosition: "bottom center", // The absolute fix! Keeps the subjects anchored to the ground
+              opacity: isHovered ? 1 : 0.45,
+              transform: isHovered ? "scale(1.05)" : "scale(1)",
+              transformOrigin: "bottom center",
               transition: T,
               maskImage: isHovered
                 ? "none"
@@ -170,11 +175,11 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
               paddingBottom: "1.2rem",
             }}
           >
-            <div style={{ 
-              height: isHovered ? "85%" : "65%", 
-              aspectRatio: "16/9", 
+            <div style={{
+              height: isHovered ? "85%" : "65%",
+              aspectRatio: "16/9",
               maxWidth: "100%",
-              transition: T 
+              transition: T
             }}>
               <TeamPhotoPlaceholder />
             </div>
@@ -188,53 +193,67 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
 // ─── Main page ────────────────────────────────────────────────────────────────
 export const PartyList = () => {
   const [hovered, setHovered] = useState(null);
+  const hoverTimeoutRef = React.useRef(null);
   const navigate = useNavigate();
 
-  return (
-    <>
-      <Header />
+  const handleEnter = (id) => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHovered(id);
+    }, 40); // Small delay to avoid accidental hover reactions
+  };
+
+  const handleLeave = () => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setHovered(null);
+  };
+
+  return <>
+    <div
+      style={{
+        background: "#34102A",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        fontFamily: "'Arial', sans-serif",
+      }}
+    >
+      {/* Sticky Header Wrapper */}
+      <div style={{ position: "sticky", top: 0, zIndex: 50, background: "#34102A" }}>
+        <Header />
+      </div>
+
+      {/* Title */}
+      <div style={{ padding: "1.2rem 2rem 0.4rem", flexShrink: 0 }}>
+        <h1 className="text-[40px] font-bold text-white mb-6 tracking-tight">
+          2026 Election Partylist
+        </h1>
+      </div>
+
+      {/* Partylist rows */}
       <div
         style={{
-          background: "#34102A",
-          minHeight: "100vh",
+          flex: 1,
           display: "flex",
           flexDirection: "column",
-          fontFamily: "'Arial', sans-serif",
         }}
       >
-        {/* Header */}
-        <div style={{ padding: "1.2rem 2rem 0.4rem", flexShrink: 0 }}>
-          <h1 className="text-[50px] font-bold text-white mb-6 tracking-tight">
-            2026 Election Partylist
-          </h1>
-        </div>
-
-        {/* Partylist rows */}
-        <div
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            minHeight: 0,
-            height: "calc(100vh - 3.5rem)",
-          }}
-        >
-          {PARTYLISTS.map((party) => (
-            <PartyRow
-              key={party.id}
-              party={party}
-              hovered={hovered}
-              onEnter={setHovered}
-              onLeave={() => setHovered(null)}
-              onClick={(id) => navigate(`/partylist/${id}`)}
-            />
-          ))}
-        </div>
-
-        <Footer />
+        {PARTYLISTS.map((party) => (
+          <PartyRow
+            key={party.id}
+            party={party}
+            hovered={hovered}
+            onEnter={handleEnter}
+            onLeave={handleLeave}
+            onClick={(id) => navigate(`/partylist/${id}`)}
+          />
+        ))}
       </div>
-    </>
-  );
+
+      <Footer />
+    </div>
+  </>
+
 };
 
 export default PartyList;
