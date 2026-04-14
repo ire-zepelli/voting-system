@@ -14,7 +14,6 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Landing />} />
-
         <Route path="/partylist" element={<PartyList />} />
         <Route path="/partylist/:id" element={<PartyListDetail />} />
         <Route path="/voting" element={<Voting />} />

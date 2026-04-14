@@ -88,14 +88,14 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
       onMouseLeave={onLeave}
       style={{
         position: "relative",
-        flex: 1, // Fixed size, unimplement the flex changing
+        flex: 1,
         overflow: "hidden",
         background: party.bgColor, // Unimplement darkening
         cursor: "pointer",
-        transition: T,
         display: "flex",
         alignItems: "center",
         borderBottom: "1px solid rgba(255,255,255,0.05)",
+        willChange: "height, flex",
       }}
     >
       {/* Giant name */}
@@ -104,12 +104,13 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
         style={{
           position: "absolute",
           top: "50%",
-          left: isHovered ? "50%" : "2rem",
-          transform: isHovered ? "translate(-50%, -50%)" : "translate(0, -50%)",
+          left: "2rem",
+          transform: isHovered 
+            ? "translate(10%, -50%) scale(2.2)" // Use transform scale for buttery smooth animation
+            : "translate(0%, -50%) scale(1)",
+          transformOrigin: "left center",
           zIndex: 1,
-          fontSize: isHovered
-            ? "clamp(10rem,30vw,25rem)"
-            : "clamp(5rem,15vw,12rem)",
+          fontSize: "clamp(5rem,15vw,12rem)",
           fontWeight: "bold",
           fontFamily: "Inter, sans-serif",
           color: isHovered ? "rgba(255,255,255,0.08)" : "#ffffff",
@@ -117,7 +118,8 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
           letterSpacing: "-0.08em", // Using em to ensure the sticked appearance in CSS
           userSelect: "none",
           whiteSpace: "nowrap",
-          transition: T,
+          transition: "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), color 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
+          willChange: "transform, color",
           pointerEvents: "none",
         }}
       >
@@ -134,7 +136,8 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
           zIndex: 2,
           display: "flex",
           justifyContent: isHovered ? "center" : "flex-end",
-          transition: T,
+          transition: "width 0.8s cubic-bezier(0.25, 1, 0.5, 1), justify-content 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
+          willChange: "width",
         }}
       >
         {party.image ? (
@@ -167,7 +170,12 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
               paddingBottom: "1.2rem",
             }}
           >
-            <div style={{ width: "250px", height: "250px", transition: T }}>
+            <div style={{ 
+              height: isHovered ? "85%" : "65%", 
+              aspectRatio: "16/9", 
+              maxWidth: "100%",
+              transition: T 
+            }}>
               <TeamPhotoPlaceholder />
             </div>
           </div>

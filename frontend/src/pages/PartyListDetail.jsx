@@ -67,7 +67,7 @@ function Section({ section, isLast }) {
             left: "50%",
             transform: "translate(-50%, -50%)",
             whiteSpace: "nowrap",
-            fontSize: "clamp(7rem, 20vw, 18rem)",
+            fontSize: "clamp(7rem, 20vw, 30rem)",
             fontWeight: "bold",
             fontFamily: "Inter, sans-serif",
             color: "rgba(255,255,255,0.05)",
