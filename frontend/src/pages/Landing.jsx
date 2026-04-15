@@ -70,38 +70,38 @@ export default function Landing() {
             </div>
           </section>
 
-<aside className="relative lg:self-start w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
-  {/* The countdown box */}
-<div
-  className="sticky top-6 rounded-[2rem] p-8 overflow-hidden w-full lg:w-[110%] xl:w-[120%] lg:-ml-4"
-  style={{
-    backgroundColor: "rgba(79, 31, 115, 0.70)",
-    border: "1.23px solid rgba(255, 255, 255, 0.30)",
-    boxShadow: "0px 4px 24px 0px rgba(0, 0, 0, 0.40)",
-  }}
->
-    <div className="flex flex-col text-white relative z-10 w-full">
-      <p className="text-sm font-semibold text-white mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
-        Election ends in:
-      </p>
+          <aside className="relative lg:self-start w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
+            {/* The countdown box */}
+            <div
+              className="sticky top-6 rounded-[2rem] p-8 overflow-hidden w-full lg:w-[110%] xl:w-[120%] lg:-ml-4"
+              style={{
+                backgroundColor: "rgba(79, 31, 115, 0.70)",
+                border: "1.23px solid rgba(255, 255, 255, 0.30)",
+                boxShadow: "0px 4px 24px 0px rgba(0, 0, 0, 0.40)",
+              }}
+            >
+              <div className="flex flex-col text-white relative z-10 w-full">
+                <p className="text-sm font-semibold text-white mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
+                  Election ends in:
+                </p>
 
-      <div className="flex justify-between items-center gap-3 sm:gap-4 mt-2">
-        <div className="flex flex-col items-center flex-1">
-          <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">69</p>
-          <p className="text-sm font-helvetica italic font-medium">Hours</p>
-        </div>
-        <div className="flex flex-col items-center flex-1">
-          <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">45</p>
-          <p className="text-sm font-helvetica italic font-medium">Minutes</p>
-        </div>
-        <div className="flex flex-col items-center flex-1">
-          <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">32</p>
-          <p className="text-sm font-helvetica italic font-medium">Seconds</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</aside>
+                <div className="flex justify-between items-center gap-3 sm:gap-4 mt-2">
+                  <div className="flex flex-col items-center flex-1">
+                    <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">69</p>
+                    <p className="text-sm font-helvetica italic font-medium">Hours</p>
+                  </div>
+                  <div className="flex flex-col items-center flex-1">
+                    <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">45</p>
+                    <p className="text-sm font-helvetica italic font-medium">Minutes</p>
+                  </div>
+                  <div className="flex flex-col items-center flex-1">
+                    <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">32</p>
+                    <p className="text-sm font-helvetica italic font-medium">Seconds</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
       </main>
 
