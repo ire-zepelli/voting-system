@@ -65,13 +65,110 @@ function VotingState({ title, message, actionLabel, onAction }) {
   );
 }
 
+function SkipConfirmationModal({
+  confirmationState,
+  onCancel,
+  onConfirm,
+  isSubmitting,
+}) {
+  if (!confirmationState) {
+    return null;
+  }
+
+  const { mode, positions } = confirmationState;
+  const isSinglePosition = positions.length === 1;
+  const title =
+    mode === "next"
+      ? `Skip ${positions[0]}?`
+      : "Submit Ballot With Blank Positions?";
+  const description =
+    mode === "next"
+      ? `You have not selected a candidate for ${positions[0]}. If you continue, this position will be left blank. Only selected candidates will be recorded when you submit your ballot.`
+      : `You still have ${positions.length} ${positions.length === 1 ? "position" : "positions"} without a selected candidate. If you continue, those positions will be left blank and only your selected candidates will be recorded.`;
+  const confirmLabel =
+    mode === "next" ? "Continue Without Selecting" : "Submit Selected Votes";
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#12030f]/80 px-4 backdrop-blur-sm">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="skip-modal-title"
+        className="w-full max-w-2xl rounded-[2rem] border border-white/10 bg-[#2D0D25] p-6 md:p-8 text-white shadow-[0_20px_80px_rgba(0,0,0,0.45)]"
+      >
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#FFA700] mb-3">
+              Confirmation Required
+            </p>
+            <h2 id="skip-modal-title" className="text-3xl font-bold tracking-tight">
+              {title}
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isSubmitting}
+            className="text-white/50 hover:text-white transition-colors text-sm uppercase tracking-[0.18em] disabled:opacity-40"
+          >
+            Close
+          </button>
+        </div>
+
+        <p className="mt-5 text-white/75 leading-relaxed">
+          {description}
+        </p>
+
+        {!isSinglePosition && (
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
+            <p className="text-sm uppercase tracking-[0.18em] text-white/55 mb-3">
+              Positions To Leave Blank
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {positions.map((position) => (
+                <span
+                  key={position}
+                  className="rounded-full border border-[#FFA700]/25 bg-[#FFA700]/10 px-3 py-1 text-sm text-[#FFD68A]"
+                >
+                  {position}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isSubmitting}
+            className="rounded-xl border border-white/15 px-5 py-3 text-white/80 hover:bg-white/5 transition-colors disabled:opacity-40"
+          >
+            Go Back And Review
+          </button>
+          <Button
+            type="button"
+            className="sm:w-auto px-6"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Processing..." : confirmLabel}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Voting() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { token, updateUser, user } = useAuth();
   const [selectedVotes, setSelectedVotes] = useState({});
+  const [skippedPositions, setSkippedPositions] = useState({});
   const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
   const [statusMessage, setStatusMessage] = useState("");
+  const [confirmationState, setConfirmationState] = useState(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["candidates"],
@@ -83,9 +180,25 @@ export default function Voting() {
   const selectedCount = positions.filter(
     (positionGroup) => selectedVotes[positionGroup.position]
   ).length;
-  const isBallotComplete = positions.length > 0 && selectedCount === positions.length;
+  const skippedCount = positions.filter(
+    (positionGroup) => skippedPositions[positionGroup.position]
+  ).length;
+  const reviewedCount = positions.filter(
+    (positionGroup) =>
+      selectedVotes[positionGroup.position] || skippedPositions[positionGroup.position]
+  ).length;
+  const unresolvedPositions = positions
+    .filter(
+      (positionGroup) =>
+        !selectedVotes[positionGroup.position] &&
+        !skippedPositions[positionGroup.position]
+    )
+    .map((positionGroup) => positionGroup.position);
   const isCurrentPositionSelected = Boolean(
     currentPosition && selectedVotes[currentPosition.position]
+  );
+  const isCurrentPositionSkipped = Boolean(
+    currentPosition && skippedPositions[currentPosition.position]
   );
 
   const voteMutation = useMutation({
@@ -106,16 +219,83 @@ export default function Voting() {
   });
 
   const handleVote = (position, candidateId) => {
+    const nextCandidateId = selectedVotes[position] === candidateId ? null : candidateId;
+
     setStatusMessage("");
     setSelectedVotes((prev) => ({
       ...prev,
-      [position]: prev[position] === candidateId ? null : candidateId,
+      [position]: nextCandidateId,
     }));
+    setSkippedPositions((prev) => {
+      if (!prev[position]) {
+        return prev;
+      }
+
+      const next = { ...prev };
+      delete next[position];
+      return next;
+    });
+  };
+
+  const markPositionsSkipped = (positionsToSkip) => {
+    setSkippedPositions((prev) => {
+      const next = { ...prev };
+
+      positionsToSkip.forEach((position) => {
+        next[position] = true;
+      });
+
+      return next;
+    });
+  };
+
+  const buildCandidateIds = () => Object.values(selectedVotes).filter(Boolean);
+
+  const requestConfirmation = (mode, positionsToConfirm) => {
+    setConfirmationState({ mode, positions: positionsToConfirm });
+  };
+
+  const closeConfirmation = () => {
+    if (voteMutation.isPending) {
+      return;
+    }
+
+    setConfirmationState(null);
+  };
+
+  const handleConfirmedProceed = () => {
+    if (!confirmationState) {
+      return;
+    }
+
+    const { mode, positions: positionsToSkip } = confirmationState;
+    markPositionsSkipped(positionsToSkip);
+    setConfirmationState(null);
+
+    if (mode === "next") {
+      setStatusMessage(
+        `${positionsToSkip[0]} will be left blank. You can still go back and choose a candidate before final submission.`
+      );
+
+      if (currentPositionIndex < positions.length - 1) {
+        setCurrentPositionIndex(currentPositionIndex + 1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      return;
+    }
+
+    setStatusMessage("");
+    voteMutation.mutate(buildCandidateIds());
   };
 
   const handleNext = () => {
-    if (!isCurrentPositionSelected) {
-      setStatusMessage(`Select a candidate for ${currentPosition.position} before continuing.`);
+    if (!currentPosition) {
+      return;
+    }
+
+    if (!isCurrentPositionSelected && !isCurrentPositionSkipped) {
+      requestConfirmation("next", [currentPosition.position]);
       return;
     }
 
@@ -133,15 +313,17 @@ export default function Voting() {
   };
 
   const handleSubmit = () => {
-    if (!isBallotComplete) {
-      setStatusMessage("Select one candidate for every position before submitting your ballot.");
+    if (!positions.length) {
+      return;
+    }
+
+    if (unresolvedPositions.length > 0) {
+      requestConfirmation("submit", unresolvedPositions);
       return;
     }
 
     setStatusMessage("");
-    voteMutation.mutate(
-      positions.map((positionGroup) => selectedVotes[positionGroup.position])
-    );
+    voteMutation.mutate(buildCandidateIds());
   };
 
   if (user?.hasVoted) {
@@ -202,8 +384,14 @@ export default function Voting() {
       <div className="flex flex-col min-h-[50vh]">
         <div className="px-6 md:px-14 pt-4 text-white/80 text-sm tracking-wide flex justify-between gap-4">
           <span>
-            Ballot progress: {selectedCount} / {positions.length}
+            Ballot progress: {reviewedCount} / {positions.length} reviewed
           </span>
+          <span>
+            Selected: {selectedCount} | Left blank: {skippedCount}
+          </span>
+        </div>
+
+        <div className="px-6 md:px-14 pt-2 text-white/60 text-sm tracking-wide flex justify-end">
           <span>
             {currentPositionIndex + 1} of {positions.length}
           </span>
@@ -212,6 +400,12 @@ export default function Voting() {
         {statusMessage && (
           <div className="mx-6 md:mx-14 mt-4 rounded-xl border border-[#FFA700]/30 bg-[#FFA700]/10 px-4 py-3 text-sm text-[#FFD68A]">
             {statusMessage}
+          </div>
+        )}
+
+        {isCurrentPositionSkipped && !isCurrentPositionSelected && (
+          <div className="mx-6 md:mx-14 mt-4 rounded-xl border border-sky-300/20 bg-sky-400/10 px-4 py-3 text-sm text-sky-100">
+            {currentPosition.position} is currently left blank. You can still select a candidate before submitting your ballot.
           </div>
         )}
 
@@ -238,16 +432,23 @@ export default function Voting() {
         )}
         <div className="w-48 md:w-[250px]">
           {currentPositionIndex < positions.length - 1 ? (
-            <Button className="w-full" onClick={handleNext} disabled={!isCurrentPositionSelected || voteMutation.isPending}>
+            <Button className="w-full" onClick={handleNext} disabled={voteMutation.isPending}>
               Next
             </Button>
           ) : (
-            <Button className="w-full" onClick={handleSubmit} disabled={!isBallotComplete || voteMutation.isPending}>
+            <Button className="w-full" onClick={handleSubmit} disabled={voteMutation.isPending}>
               {voteMutation.isPending ? "Submitting..." : "Submit"}
             </Button>
           )}
         </div>
       </div>
+
+      <SkipConfirmationModal
+        confirmationState={confirmationState}
+        onCancel={closeConfirmation}
+        onConfirm={handleConfirmedProceed}
+        isSubmitting={voteMutation.isPending}
+      />
 
       <Footer />
     </div>

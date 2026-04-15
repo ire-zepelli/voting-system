@@ -15,11 +15,7 @@ function isValidPassword(password = "") {
 }
 
 function isValidCandidateIds(candidateIds) {
-  return (
-    Array.isArray(candidateIds) &&
-    candidateIds.length > 0 &&
-    candidateIds.every((candidateId) => uuidPattern.test(candidateId))
-  );
+  return Array.isArray(candidateIds) && candidateIds.every((candidateId) => uuidPattern.test(candidateId));
 }
 
 module.exports = {

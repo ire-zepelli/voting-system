@@ -123,14 +123,7 @@ router.post("/votes", requireAuth, async (req, res) => {
   if (!isValidCandidateIds(candidateIds)) {
     return res.status(400).json({
       success: false,
-      message: "Submit a complete ballot with valid candidate selections.",
-    });
-  }
-
-  if (new Set(candidateIds).size !== candidateIds.length) {
-    return res.status(400).json({
-      success: false,
-      message: "Only one candidate can be selected per position.",
+      message: "Submit only valid candidate selections.",
     });
   }
 
@@ -163,8 +156,8 @@ router.post("/votes", requireAuth, async (req, res) => {
     const statusCode =
       message.includes("already been submitted")
         ? 409
-        : message.includes("Complete the ballot") ||
-            message.includes("Only one candidate")
+        : message.includes("only select one candidate") ||
+            message.includes("unknown candidate")
           ? 400
           : 500;
 

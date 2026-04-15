@@ -1,5 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+DROP FUNCTION IF EXISTS cast_ballot(UUID, JSONB);
 DROP FUNCTION IF EXISTS cast_ballot(UUID, UUID[]);
 DROP TABLE IF EXISTS ballot_items;
 DROP TABLE IF EXISTS ballots;
@@ -70,7 +71,7 @@ INSERT INTO candidates (name, partylist, position, display_order, image_path) VA
 CREATE OR REPLACE FUNCTION cast_ballot(v_voter_id UUID, v_candidate_ids UUID[])
 RETURNS VOID AS $$
 DECLARE
-    expected_position_count INTEGER;
+    submitted_candidate_count INTEGER;
     selected_position_count INTEGER;
     voter_has_voted BOOLEAN;
     new_ballot_id UUID;
@@ -89,21 +90,22 @@ BEGIN
         RAISE EXCEPTION 'Your ballot has already been submitted.';
     END IF;
 
-    SELECT count(DISTINCT position)
-    INTO expected_position_count
-    FROM candidates;
-
-    SELECT count(DISTINCT position)
-    INTO selected_position_count
-    FROM candidates
-    WHERE id = ANY(v_candidate_ids);
-
-    IF coalesce(array_length(v_candidate_ids, 1), 0) <> selected_position_count THEN
-        RAISE EXCEPTION 'Only one candidate can be selected per position.';
+    IF EXISTS (
+        SELECT 1
+        FROM unnest(coalesce(v_candidate_ids, ARRAY[]::UUID[])) AS selected(candidate_id)
+        LEFT JOIN candidates c ON c.id = selected.candidate_id
+        WHERE c.id IS NULL
+    ) THEN
+        RAISE EXCEPTION 'Ballot contains an unknown candidate.';
     END IF;
 
-    IF selected_position_count <> expected_position_count THEN
-        RAISE EXCEPTION 'Complete the ballot before submitting.';
+    SELECT count(*), count(DISTINCT c.position)
+    INTO submitted_candidate_count, selected_position_count
+    FROM unnest(coalesce(v_candidate_ids, ARRAY[]::UUID[])) AS selected(candidate_id)
+    JOIN candidates c ON c.id = selected.candidate_id;
+
+    IF submitted_candidate_count <> selected_position_count THEN
+        RAISE EXCEPTION 'You can only select one candidate per position.';
     END IF;
 
     INSERT INTO ballots (voter_id)
@@ -111,9 +113,12 @@ BEGIN
     RETURNING id INTO new_ballot_id;
 
     INSERT INTO ballot_items (ballot_id, position, candidate_id)
-    SELECT new_ballot_id, position, id
-    FROM candidates
-    WHERE id = ANY(v_candidate_ids);
+    SELECT
+        new_ballot_id,
+        c.position,
+        c.id
+    FROM unnest(coalesce(v_candidate_ids, ARRAY[]::UUID[])) AS selected(candidate_id)
+    JOIN candidates c ON c.id = selected.candidate_id;
 
     UPDATE voters
     SET has_voted = TRUE

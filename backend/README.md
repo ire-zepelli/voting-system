@@ -12,6 +12,10 @@ This backend provides student registration, login, ballot submission, and result
   ```text
   backend/database/supabase_setup.sql
   ```
+  If your database already has the earlier abstention-based ballot logic, run this migration too:
+  ```text
+  backend/database/add_abstentions.sql
+  ```
 4. Start the API:
   ```sh
   npm run dev
@@ -37,7 +41,7 @@ DB_PASSWORD=
 - `POST /api/auth/login` authenticates a voter.
 - `GET /api/auth/me` returns the current voter session.
 - `GET /api/candidates` returns the ballot candidates.
-- `POST /api/votes` submits a complete ballot for the logged-in voter.
+- `POST /api/votes` submits only the selected candidate IDs for the logged-in voter.
 - `GET /api/results` returns grouped election results.
 - `GET /api/health/db` checks the database connection.
 
@@ -45,4 +49,5 @@ DB_PASSWORD=
 - Voters are stored in `voters`.
 - Candidates are stored in `candidates`.
 - Submitted ballots are stored in `ballots` and `ballot_items`.
-- The `cast_ballot` PostgreSQL function locks the voter row and rejects duplicate or incomplete submissions.
+- `ballot_items` stores only the positions where a candidate was selected.
+- The `cast_ballot` PostgreSQL function locks the voter row and rejects duplicate or invalid submissions.
