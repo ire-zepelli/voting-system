@@ -65,7 +65,7 @@ const PARTY_DATA = {
     {
       title: "EXECUTIVES",
       members: [
-        { name: "Diane Mendoza", position: "Secretary", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/SECRETARY - MENDOZA_.png" },
+        { name: "Diane Mendoza", position: "Secretary", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/SECRETARY - MENDOZA_.png", flip: true },
         { name: "Altheia Dano", position: "Vice-President Internal", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP INTERNAL- DANO.png" },
         { name: "Darren Villanueva", position: "President", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/PRES- VILLANUEVA_.png" },
         { name: "Kane Huxley Book", position: "Vice-President External", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP EXTERNAL - BOOK.png" },
@@ -75,10 +75,10 @@ const PARTY_DATA = {
     {
       title: "CHIEFS",
       members: [
-        { name: "Jea Mary Trixy Magalland", position: "Public Information Officer", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/P.I OFFICER- MAGALLANO.png" },
-        { name: "Abijah Shen Regado", position: "Chief of Representative", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/REPRESENTATIVE - REGADO.png" },
+        { name: "Jea Mary Trixy Magalland", position: "Public Information Officer", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/P.I OFFICER- MAGALLANO.png", flip: true },
+        { name: "Abijah Shen Regado", position: "Chief of Representative", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/REPRESENTATIVE - REGADO.png", flip: true },
         { name: "Tristhan Mark Vincent Villamor", position: "Chief of Creatives", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CREATIVES - VILLAMOR_.png" },
-        { name: "Myka Angela Dumael", position: "Auditor", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/AUDIT- DUMAEL.png" },
+        { name: "Myka Angela Dumael", position: "Auditor", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/AUDIT- DUMAEL.png", flip: false },
         { name: "Jeoff Andrew Demecillo", position: "Chief of Students Development", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/DEVELOPMENT - DEMECILLO.png" },
       ],
     },
@@ -92,7 +92,7 @@ const PARTY_DATA = {
 };
 
 // ─── One full-viewport section ────────────────────────────────────────────────
-function Section({ section, isLast }) {
+function Section({ section, isLast, initialFacing }) {
   return (
     <section
       id={section.title}
@@ -175,6 +175,7 @@ function Section({ section, isLast }) {
           members={section.members}
           rowHeight="clamp(380px, 70vh, 750px)"
           showName={true}
+          initialFacing={initialFacing}
         />
       </div>
     </section>
@@ -383,7 +384,7 @@ function ImageModal({ src, alt, isOpen, onClose }) {
 
 function CarouselModal({ images, isOpen, onClose }) {
   const [current, setCurrent] = React.useState(0);
-  
+
   // Reset index when opening
   React.useEffect(() => {
     if (isOpen) setCurrent(0);
@@ -478,15 +479,15 @@ function CarouselModal({ images, isOpen, onClose }) {
             transition: "all 0.3s ease",
           }}
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
         </button>
       )}
 
       {/* Main Container */}
-      <div 
-        style={{ 
-          position: "relative", 
-          maxWidth: "100%", 
+      <div
+        style={{
+          position: "relative",
+          maxWidth: "100%",
           maxHeight: "85vh",
           display: "flex",
           flexDirection: "column",
@@ -556,7 +557,7 @@ function CarouselModal({ images, isOpen, onClose }) {
             transition: "all 0.3s ease",
           }}
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
         </button>
       )}
     </div>
@@ -598,12 +599,12 @@ export default function PartyListDetail() {
       }}
     >
       <StickyHeader />
-      <RoleNavbar 
-        sections={sections} 
+      <RoleNavbar
+        sections={sections}
         onSectionClick={() => {
           setIsOrgModalOpen(false);
           setIsPlatformModalOpen(false);
-        }} 
+        }}
       />
 
       {/* Team Header Section */}
@@ -680,9 +681,9 @@ export default function PartyListDetail() {
             text="Organizational Chart"
             onClick={() => setIsOrgModalOpen(true)}
           />
-          <ActionButton 
-            text="Platform" 
-            onClick={() => setIsPlatformModalOpen(true)} 
+          <ActionButton
+            text="Platform"
+            onClick={() => setIsPlatformModalOpen(true)}
           />
         </div>
 
@@ -693,7 +694,7 @@ export default function PartyListDetail() {
           isOpen={isOrgModalOpen}
           onClose={() => setIsOrgModalOpen(false)}
         />
-        
+
         <CarouselModal
           images={teamInfo.platformImages}
           isOpen={isPlatformModalOpen}
@@ -707,6 +708,7 @@ export default function PartyListDetail() {
           key={section.title}
           section={section}
           isLast={i === sections.length - 1}
+          initialFacing="right"
         />
       ))}
 

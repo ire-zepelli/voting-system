@@ -20,6 +20,7 @@ export default function MemberCardRow({
   onSelect,
   showName = false,
   rowHeight = "420px",
+  initialFacing = "right", // "right" or "left"
 }) {
   return (
     <div style={{
@@ -31,6 +32,12 @@ export default function MemberCardRow({
       height: rowHeight,
     }}>
       {members.slice(0, 5).map((member, i) => {
+        const centerIndex = Math.floor(members.length / 2);
+        // Manual override takes precedence, otherwise use positional logic
+        const shouldFlip = typeof member.flip === "boolean"
+          ? member.flip
+          : (initialFacing === "right" ? i > centerIndex : i < centerIndex);
+
         return (
           <div key={i} style={{
             flex: "1 1 0",
@@ -44,6 +51,7 @@ export default function MemberCardRow({
               selected={selectedIds.includes(i)}
               onSelect={onSelect ? () => onSelect(i) : undefined}
               showName={showName}
+              flipX={shouldFlip}
             />
           </div>
         );
