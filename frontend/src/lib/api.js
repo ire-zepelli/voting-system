@@ -1,10 +1,14 @@
-const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(
-  /\/$/,
-  ""
-);
+const configuredApiBaseUrl = import.meta.env.VITE_API_URL;
+const API_BASE_URL = (
+  configuredApiBaseUrl || (import.meta.env.DEV ? "http://localhost:5000" : "")
+).replace(/\/$/, "");
 
 export async function apiRequest(path, options = {}) {
   const { method = "GET", body, token, headers = {}, signal } = options;
+
+  if (!API_BASE_URL) {
+    throw new Error("Frontend deployment is missing VITE_API_URL.");
+  }
 
   let response;
 
