@@ -10,7 +10,7 @@ import { useAuth } from "../context/useAuth";
 
 export default function Register() {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading, register, user } = useAuth();
+  const { isAuthenticated, isLoading, register } = useAuth();
   const [formData, setFormData] = useState({
     studentId: "",
     password: "",
@@ -20,7 +20,7 @@ export default function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isLoading && isAuthenticated) {
-    return <Navigate to={user?.hasVoted ? "/results" : "/voting"} replace />;
+    return <Navigate to="/" replace />;
   }
 
   function handleChange(event) {
@@ -60,7 +60,7 @@ export default function Register() {
         password: formData.password,
       });
 
-      navigate("/voting", { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       setErrorMessage(error.message);
     } finally {

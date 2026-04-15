@@ -11,7 +11,7 @@ import { useAuth } from "../context/useAuth";
 export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading, login, user } = useAuth();
+  const { isAuthenticated, isLoading, login } = useAuth();
   const [formData, setFormData] = useState({
     studentId: "",
     password: "",
@@ -25,7 +25,7 @@ export default function Login() {
   const isLogin = !isNotSignedIn && !isTimerExpired;
 
   if (!isLoading && isAuthenticated) {
-    return <Navigate to={user?.hasVoted ? "/results" : "/voting"} replace />;
+    return <Navigate to="/" replace />;
   }
 
   function handleChange(event) {
@@ -44,12 +44,12 @@ export default function Login() {
     setIsSubmitting(true);
 
     try {
-      const nextUser = await login({
+      await login({
         studentId: formData.studentId,
         password: formData.password,
       });
 
-      navigate(nextUser.hasVoted ? "/results" : "/voting", { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
