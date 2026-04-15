@@ -1,68 +1,48 @@
 # Voting System Backend
 
-This is the backend API for the Voting System project. It is built with Node.js, Express, and connects to a Supabase-hosted PostgreSQL database.
-
-## Prerequisites
-- Node.js (v18 or higher recommended)
-- npm (comes with Node.js)
-- Access to the Supabase project (for database credentials)
+This backend provides student registration, login, ballot submission, and results for the PSITS voting system. It connects directly to your Supabase PostgreSQL database, so the project stays split into only two apps: frontend and backend.
 
 ## Setup
-1. **Clone the repository**
-   ```sh
-   git clone <your-repo-url>
-   cd voting-system/backend
-   ```
-2. **Install dependencies**
-   ```sh
-   npm install
-   ```
-3. **Configure environment variables**
-   - Copy `.env.example` to `.env`:
-     ```sh
-     cp .env.example .env
-     ```
-   - Fill in `DB_PASSWORD` with your Supabase database password. (Ask the project owner if you do not have it.)
-   - If you rotate the password in Supabase, update `.env` accordingly.
-
-   **Example .env:**
-   ```env
-   PORT=5000
-   DB_HOST=aws-1-ap-southeast-1.pooler.supabase.com
-   DB_PORT=5432
-   DB_NAME=postgres
-   DB_USER=postgres.ifabxduzqquvfbqqespt
-   DB_PASSWORD=YOUR_SUPABASE_DB_PASSWORD
-   ```
-
-## Running the Server
-- For development (with auto-reload):
+1. Install dependencies:
+  ```sh
+  npm install
+  ```
+2. Copy `.env.example` to `.env` and fill in the database values plus a strong `AUTH_TOKEN_SECRET`.
+3. Run the SQL file in the Supabase SQL editor:
+  ```text
+  backend/database/supabase_setup.sql
+  ```
+4. Start the API:
   ```sh
   npm run dev
   ```
-- For production:
-  ```sh
-  npm start
-  ```
 
-The server will start on the port specified in `.env` (default: 5000).
+## Environment Variables
+Use either `DATABASE_URL` or the individual `DB_*` values.
 
-## API Endpoints
-- `GET /` — Basic status and available endpoints
-- `GET /api/test` — Test endpoint
-- `GET /api/health/db` — Database connection health check
+```env
+PORT=5000
+FRONTEND_URL=http://localhost:5173
+AUTH_TOKEN_SECRET=replace-with-a-long-random-secret
+DATABASE_URL=
+DB_HOST=
+DB_PORT=5432
+DB_NAME=postgres
+DB_USER=
+DB_PASSWORD=
+```
 
-## Supabase Database
-- This backend connects directly to the Supabase PostgreSQL database using the credentials in `.env`.
-- If you need access to the Supabase project, contact the project owner.
+## Main Endpoints
+- `POST /api/auth/register` creates a voter account using an 8-digit student ID and password.
+- `POST /api/auth/login` authenticates a voter.
+- `GET /api/auth/me` returns the current voter session.
+- `GET /api/candidates` returns the ballot candidates.
+- `POST /api/votes` submits a complete ballot for the logged-in voter.
+- `GET /api/results` returns grouped election results.
+- `GET /api/health/db` checks the database connection.
 
-## Security Notes
-- **Never commit your real `.env` file or database password to version control.**
-- If a password is exposed, rotate it in Supabase and update `.env`.
-
-## Project Structure
-- `src/` — Source code (Express app, database module, routes)
-- `.env.example` — Template for required environment variables
-
-## Questions?
-If you have issues or need credentials, contact the project owner or lead developer.
+## Database Notes
+- Voters are stored in `voters`.
+- Candidates are stored in `candidates`.
+- Submitted ballots are stored in `ballots` and `ballot_items`.
+- The `cast_ballot` PostgreSQL function locks the voter row and rejects duplicate or incomplete submissions.

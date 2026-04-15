@@ -7,13 +7,14 @@ import Footer from "../components/Footer";
 import ccsLogo from "../assets/uclmccs.png";
 import uclmpsits from "../assets/uclmpsits.png";
 
+const WORDS = ["RIGHTS", "PASSION", "FUTURE", "DREAMS"];
+
 export default function Landing() {
   const [wordIndex, setWordIndex] = useState(0);
-  const words = ["RIGHTS", "PASSION", "FUTURE", "DREAMS"];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % words.length);
+      setWordIndex((prev) => (prev + 1) % WORDS.length);
     }, 2500);
     return () => clearInterval(interval);
   }, []);
@@ -24,7 +25,7 @@ export default function Landing() {
 
       {/* Massive Background Text effect */}
       <div className="pointer-events-none absolute inset-x-0 top-[65%] z-0 h-[200px]" style={{ transform: "translateY(-50%)" }}>
-        {words.map((word, idx) => (
+        {WORDS.map((word, idx) => (
           <div
             key={word}
             className={`absolute inset-0 flex w-full justify-center overflow-hidden font-helvetica text-[5.5rem] sm:text-[7rem] lg:text-[9rem] leading-none font-black tracking-tighter uppercase text-center transition-opacity duration-1000 ease-in-out ${idx === wordIndex ? "opacity-100" : "opacity-0"}`}
