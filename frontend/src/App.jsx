@@ -2,13 +2,13 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Voting from "./pages/Voting";
-import CandidatePoster from "./pages/CandidatePoster";
 import { PartyList } from "./pages/PartyList";
 import PartyListDetail from "./pages/PartyListDetail";
 import Results from "./pages/Results";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
   return (
@@ -25,7 +25,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/candidate-poster" element={<CandidatePoster />} />
         <Route path="/results" element={<Results />} />
 
         <Route path="/login" element={<Login />} />
