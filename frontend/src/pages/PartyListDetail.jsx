@@ -351,7 +351,7 @@ function ImageModal({ src, alt, isOpen, onClose }) {
         inset: 0,
         backgroundColor: "rgba(0, 0, 0, 0.85)",
         backdropFilter: "blur(12px)",
-        zIndex: 1000,
+        zIndex: 2000,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -449,7 +449,7 @@ function CarouselModal({ images, isOpen, onClose }) {
         inset: 0,
         backgroundColor: "rgba(0,0, 0, 0.9)",
         backdropFilter: "blur(15px)",
-        zIndex: 1000,
+        zIndex: 2000,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -737,19 +737,7 @@ export default function PartyListDetail() {
           />
         </div>
 
-        {/* Modal Overlays */}
-        <ImageModal
-          src={teamInfo.orgChart}
-          alt={`${teamInfo.label} Organizational Chart`}
-          isOpen={isOrgModalOpen}
-          onClose={() => setIsOrgModalOpen(false)}
-        />
 
-        <CarouselModal
-          images={teamInfo.platformImages}
-          isOpen={isPlatformModalOpen}
-          onClose={() => setIsPlatformModalOpen(false)}
-        />
       </section>
 
       {/* Role Sections */}
@@ -765,10 +753,24 @@ export default function PartyListDetail() {
 
       <Footer />
 
+      {/* Modal Overlays (Moved to bottom to fix stacking context) */}
+      <ImageModal
+        src={teamInfo.orgChart}
+        alt={`${teamInfo.label} Organizational Chart`}
+        isOpen={isOrgModalOpen}
+        onClose={() => setIsOrgModalOpen(false)}
+      />
+
+      <CarouselModal
+        images={teamInfo.platformImages}
+        isOpen={isPlatformModalOpen}
+        onClose={() => setIsPlatformModalOpen(false)}
+      />
+
       {/* Popup Overlay */}
       {popupData && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+          className="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-8"
           onClick={() => setPopupData(null)}
           style={{
             background: 'rgba(20, 4, 15, 0.85)',
