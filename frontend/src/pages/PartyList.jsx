@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -29,43 +29,28 @@ const PARTYLISTS = [
 // ─── Team photo placeholder ───────────────────────────────────────────────────
 function TeamPhotoPlaceholder() {
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "rgba(255,255,255,0.05)",
-        border: "2px dashed rgba(255,255,255,0.15)",
-        borderRadius: "0.75rem",
-        gap: "0.6rem",
-      }}
-    >
-      <svg
-        width="44"
-        height="44"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="rgba(255,255,255,0.3)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
+    <div style={{
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "rgba(255,255,255,0.05)",
+      border: "2px dashed rgba(255,255,255,0.15)",
+      borderRadius: "0.75rem",
+      gap: "0.6rem"
+    }}>
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
         <circle cx="12" cy="13" r="4" />
       </svg>
-      <span
-        style={{
-          fontFamily: "Inter, sans-serif",
-          color: "rgba(255,255,255,0.25)",
-          fontSize: "0.68rem",
-          letterSpacing: "0.1em",
-        }}
-      >
-        TEAM PHOTO
-      </span>
+      <span style={{
+        fontFamily: "Inter, sans-serif",
+        color: "rgba(255,255,255,0.25)",
+        fontSize: "0.68rem",
+        letterSpacing: "0.1em"
+      }}>TEAM PHOTO</span>
     </div>
   );
 }
@@ -93,7 +78,7 @@ function ArrowButton({ direction, onClick, disabled }) {
         transition: "all 0.25s cubic-bezier(0.25,1,0.5,1)",
         transform: hov && !disabled ? "scale(1.08)" : "scale(1)",
         outline: "none",
-        flexShrink: 0,
+        flexShrink: 0
       }}
       aria-label={direction === "left" ? "Previous party" : "Next party"}
     >
@@ -120,14 +105,14 @@ function CarouselSlide({ party, active, onClick }) {
       style={{
         position: "absolute",
         inset: 0,
-        background: party.bgColor,
+        background: "#34102A",
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
         cursor: "pointer",
         opacity: active ? 1 : 0,
         pointerEvents: active ? "auto" : "none",
-        transition: "opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1)",
+        transition: "opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -155,7 +140,7 @@ function CarouselSlide({ party, active, onClick }) {
           whiteSpace: "nowrap",
           transition: "transform 0.75s cubic-bezier(0.25, 1, 0.5, 1), color 0.75s cubic-bezier(0.25, 1, 0.5, 1)",
           willChange: "transform, color",
-          pointerEvents: "none",
+          pointerEvents: "none"
         }}
       >
         {party.label}
@@ -174,7 +159,7 @@ function CarouselSlide({ party, active, onClick }) {
           justifyContent: hovered ? "center" : "flex-end",
           transition: "width 0.75s cubic-bezier(0.25, 1, 0.5, 1)",
           willChange: "width",
-          pointerEvents: "none",
+          pointerEvents: "none"
         }}
       >
         {party.image ? (
@@ -199,21 +184,19 @@ function CarouselSlide({ party, active, onClick }) {
                 : "linear-gradient(to right, transparent 0%, black 28%)",
               WebkitMaskImage: hovered
                 ? "none"
-                : "linear-gradient(to right, transparent 0%, black 28%)",
+                : "linear-gradient(to right, transparent 0%, black 28%)"
             }}
           />
         ) : (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: hovered ? "center" : "flex-end",
-              width: "100%",
-              height: "100%",
-              paddingRight: hovered ? 0 : "2rem",
-              paddingBottom: "1.2rem",
-            }}
-          >
+          <div style={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: hovered ? "center" : "flex-end",
+            width: "100%",
+            height: "100%",
+            paddingRight: hovered ? 0 : "2rem",
+            paddingBottom: "1.2rem"
+          }}>
             <div style={{ height: hovered ? "85%" : "65%", aspectRatio: "16/9", maxWidth: "100%", transition: T }}>
               <TeamPhotoPlaceholder />
             </div>
@@ -234,7 +217,7 @@ function CarouselSlide({ party, active, onClick }) {
           opacity: hovered ? 1 : 0,
           transform: hovered ? "translateY(0)" : "translateY(6px)",
           transition: "opacity 0.4s ease, transform 0.4s ease",
-          pointerEvents: "none",
+          pointerEvents: "none"
         }}
       >
         <span style={{
@@ -243,7 +226,7 @@ function CarouselSlide({ party, active, onClick }) {
           fontWeight: 500,
           color: "rgba(255,255,255,0.85)",
           letterSpacing: "0.05em",
-          textTransform: "uppercase",
+          textTransform: "uppercase"
         }}>
           View Party
         </span>
@@ -261,38 +244,35 @@ export const PartyList = () => {
   const navigate = useNavigate();
   const total = PARTYLISTS.length;
 
-  const prev = () => setCurrent((c) => (c - 1 + total) % total);
-  const next = () => setCurrent((c) => (c + 1) % total);
+  const prev = () => setCurrent(c => (c - 1 + total) % total);
+  const next = () => setCurrent(c => (c + 1) % total);
 
   return (
     <>
-      <div
-        style={{
-          background: "#34102A",
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          fontFamily: "'Inter', sans-serif",
-          overflow: "hidden",
-        }}
-      >
+      <div style={{
+        background: PARTYLISTS[current].bgColor,
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        fontFamily: "'Inter', sans-serif",
+        overflow: "hidden",
+        transition: "background 0.6s cubic-bezier(0.25, 1, 0.5, 1)"
+      }}>
         {/* Sticky Header */}
-        <div style={{ position: "relative", zIndex: 50, background: "#34102A", flexShrink: 0 }}>
+        <div style={{ position: "relative", zIndex: 50, background: "transparent", flexShrink: 0 }}>
           <Header />
         </div>
 
         {/* Title bar */}
-        <div style={{ padding: "1rem 2rem 0.75rem", flexShrink: 0 }}>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
-              fontWeight: 700,
-              color: "#fff",
-              letterSpacing: "-0.03em",
-              fontFamily: "Inter, sans-serif",
-            }}
-          >
+        <div style={{ padding: "1rem 2rem 0.75rem", flexShrink: 0, position: "relative", zIndex: 40 }}>
+          <h1 style={{
+            margin: 0,
+            fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
+            fontWeight: 700,
+            color: "#fff",
+            letterSpacing: "-0.03em",
+            fontFamily: "Inter, sans-serif"
+          }}>
             2026 Election Partylist
           </h1>
         </div>
@@ -309,18 +289,16 @@ export const PartyList = () => {
           ))}
 
           {/* Left / Right controls */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "2rem",
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 30,
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-            }}
-          >
+          <div style={{
+            position: "absolute",
+            bottom: "2rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 30,
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem"
+          }}>
             <ArrowButton direction="left" onClick={prev} disabled={total <= 1} />
 
             {/* Dot indicators */}
@@ -339,7 +317,7 @@ export const PartyList = () => {
                     cursor: "pointer",
                     transition: "all 0.35s cubic-bezier(0.25, 1, 0.5, 1)",
                     padding: 0,
-                    outline: "none",
+                    outline: "none"
                   }}
                 />
               ))}
@@ -349,19 +327,17 @@ export const PartyList = () => {
           </div>
 
           {/* Party counter top-right */}
-          <div
-            style={{
-              position: "absolute",
-              top: "1.2rem",
-              right: "2rem",
-              zIndex: 30,
-              fontFamily: "Inter, sans-serif",
-              fontSize: "0.85rem",
-              color: "rgba(255,255,255,0.5)",
-              letterSpacing: "0.08em",
-              userSelect: "none",
-            }}
-          >
+          <div style={{
+            position: "absolute",
+            top: "1.2rem",
+            right: "2rem",
+            zIndex: 30,
+            fontFamily: "Inter, sans-serif",
+            fontSize: "0.85rem",
+            color: "rgba(255,255,255,0.5)",
+            letterSpacing: "0.08em",
+            userSelect: "none"
+          }}>
             {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </div>
         </div>
@@ -371,5 +347,3 @@ export const PartyList = () => {
     </>
   );
 };
-
-export default PartyList;
