@@ -60,12 +60,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Crista Monica Oscar",
+          fname: "Crista Monica",
+          lname: "Oscar",
           image: "/BEATS/TRANSPARENT_INDIV/OSCAR_PRES.png",
         },
         {
           id: 2,
-          name: "Darren Villanueva",
+          fname: "Darren",
+          lname: "Villanueva",
           image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/PRES- VILLANUEVA_.png",
         },
       ],
@@ -77,12 +79,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Dan Pierre Pogoy",
+          fname: "Dan Pierre",
+          lname: "Pogoy",
           image: "/BEATS/TRANSPARENT_INDIV/POGOY_VP_INTERNAL.png",
         },
         {
           id: 2,
-          name: "Altheia Daño",
+          fname: "Altheia",
+          lname: "Daño",
           image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP INTERNAL- DANO.png",
         },
       ],
@@ -94,12 +98,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Ryan Pacumio",
+          fname: "Ryan",
+          lname: "Pacumio",
           image: "/BEATS/TRANSPARENT_INDIV/PACUMIO_VP_EXTERNAL.png",
         },
         {
           id: 2,
-          name: "Kane Huxley Book",
+          fname: "Kane Huxley",
+          lname: "Book",
           image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP EXTERNAL - BOOK.png",
         },
       ],
@@ -111,12 +117,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "May Lapeña",
+          fname: "May",
+          lname: "Lapeña",
           image: "/BEATS/TRANSPARENT_INDIV/LAPENA_SECRETARY.png",
         },
         {
           id: 2,
-          name: "Diane Mendoza",
+          fname: "Diane",
+          lname: "Mendoza",
           image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/SECRETARY - MENDOZA_.png",
         },
       ],
@@ -128,12 +136,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Keith Ramises Latonio",
+          fname: "Keith Ramises",
+          lname: "Latonio",
           image: "/BEATS/TRANSPARENT_INDIV/LATONIO_TREASURER.png",
         },
         {
           id: 2,
-          name: "Hanny Jane Enriquez",
+          fname: "Hanny Jane",
+          lname: "Enriquez",
           image:
             "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/TREASURER - ENRIQUEZ_.png",
         },
@@ -146,29 +156,33 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Emmanuel Franz Apawan",
+          fname: "Emmanuel Franz",
+          lname: "Apawan",
           image: "/BEATS/TRANSPARENT_INDIV/APAWAN_AUDITOR.png",
         },
         {
           id: 2,
-          name: "Myka Angela Dumael",
+          fname: "Myka Angela",
+          lname: "Dumael",
           image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/AUDIT- DUMAEL.png",
         },
       ],
     },
     {
       id: 7,
-      position: "PIO",
-      title: "PIO",
+      position: "Public Information Officer",
+      title: "PUBLIC INFORMATION \nOFFICER",
       candidates: [
         {
           id: 1,
-          name: "Fiona Monilar",
+          fname: "Fiona",
+          lname: "Monilar",
           image: "/BEATS/TRANSPARENT_INDIV/MONILAR_PIO.png",
         },
         {
           id: 2,
-          name: "Jea Mary Trixy Magallano",
+          fname: "Jea Mary Trixy",
+          lname: "Magallano",
           image:
             "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/P.I OFFICER- MAGALLANO.png",
         },
@@ -181,12 +195,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Harry Conde",
+          fname: "Harry",
+          lname: "Conde",
           image: "/BEATS/TRANSPARENT_INDIV/CONDE_CHIEF_OF_CREATIVES.png",
         },
         {
           id: 2,
-          name: "Tristhan Villamor",
+          fname: "Tristhan",
+          lname: "Villamor",
           image:
             "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CREATIVES - VILLAMOR_.png",
         },
@@ -199,12 +215,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Jhoviegen Cuysona",
+          fname: "Jhoviegen",
+          lname: "Cuysona",
           image: "/BEATS/TRANSPARENT_INDIV/CUYSONA_CHIEF_OF_REP.png",
         },
         {
           id: 2,
-          name: "Abijah Shen Regado",
+          fname: "Abijah Shen",
+          lname: "Regado",
           image:
             "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/REPRESENTATIVE - REGADO.png",
         },
@@ -217,12 +235,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Aimee Gayle Cogal",
+          fname: "Aimee Gayle",
+          lname: "Cogal",
           image: "/BEATS/TRANSPARENT_INDIV/COGAL_CHIEF_OF_STUDENTDEV.png",
         },
         {
           id: 2,
-          name: "Jeoff Andrew Demecillo",
+          fname: "Jeoff Andrew",
+          lname: "Demecillo",
           image:
             "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/DEVELOPMENT - DEMECILLO.png",
         },
@@ -235,7 +255,8 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Rose Anne Resurreccion",
+          fname: "Rose Anne",
+          lname: "Resurreccion",
           image: "/BEATS/TRANSPARENT_INDIV/RESURRECCION_ACADEMIC_REP.png",
         },
       ],
@@ -247,12 +268,14 @@ export default function Voting() {
       candidates: [
         {
           id: 1,
-          name: "Mary Grace Patalinghug",
+          fname: "Mary Grace",
+          lname: "Patalinghug",
           image: "/BEATS/TRANSPARENT_INDIV/PATALINGHUG_CARE_REP.png",
         },
         {
           id: 2,
-          name: "Nathaniel Ornopia",
+          fname: "Nathaniel",
+          lname: "Ornopia",
           image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CARES REP- ORNOPIA.png",
         },
       ],
