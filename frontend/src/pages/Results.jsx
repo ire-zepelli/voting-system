@@ -114,7 +114,7 @@ function Results() {
                                 {/* Position Title with styling */}
                                 <div className="flex items-center gap-4 mb-8 sm:mb-10">
                                     <div className="h-[2px] flex-grow bg-gradient-to-r from-transparent to-white/20"></div>
-                                    <h2 className="text-[20px] sm:text-[26px] md:text-[30px] font-bold tracking-widest uppercase text-[#FFD700] whitespace-nowrap px-4">
+                                    <h2 className="text-[20px] sm:text-[26px] md:text-[30px] font-bold tracking-widest uppercase text-[#FFD700] whitespace-nowrap px-4 drop-shadow-[0_0_12px_rgba(255,215,0,0.4)]">
                                         {position.position}
                                     </h2>
                                     <div className="h-[2px] flex-grow bg-gradient-to-l from-transparent to-white/20"></div>
