@@ -11,7 +11,7 @@ export default function CandidatesBanner({
     <div className="relative overflow-hidden w-full flex flex-col items-center pt-4 pb-20 mb-8">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 z-0 pointer-events-none select-none w-max text-center">
         <div
-          className="text-[250px] text-white opacity-40 font-black tracking-[-0.05em] uppercase whitespace-pre pr-[0.1em]"
+          className="text-[250px] text-white opacity-20 font-black tracking-[-0.05em] uppercase whitespace-pre pr-[0.1em]"
           style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "clamp(7rem, 20vw, 30rem)",
@@ -30,7 +30,8 @@ export default function CandidatesBanner({
         {candidates.map((candidate) => (
           <CandidateCard
             key={candidate.id}
-            name={candidate.name}
+            fname={candidate.fname}
+            lname={candidate.lname}
             image={candidate.image}
             isSelected={selectedCandidateId === candidate.id}
             onClick={() => onSelectCandidate(candidate.id)}
