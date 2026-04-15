@@ -34,8 +34,8 @@ export default function MemberCardRow({
         return (
           <div key={i} style={{
             flex: "1 1 0",
-            maxWidth: "18%",
-            height: "85%",
+            maxWidth: "20%",
+            height: "88%",
             minWidth: 0,
           }}>
             <MemberCard

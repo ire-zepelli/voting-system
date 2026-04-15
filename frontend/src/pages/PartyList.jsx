@@ -11,6 +11,9 @@ const PARTYLISTS = [
     image: "/BEATS/GROUP PHOTO/beatsgrouptransparent.png",
     bgColor: "#34102A",
     accentColor: "#c0547a",
+    imageScale: 1.55,
+    imageOffsetY: "-32%",      // Resting: pull photo up
+    imageHoverOffsetY: "-15.5%", // Hover: lighter shift so photo isn't cut
   },
   {
     id: "peak",
@@ -18,6 +21,8 @@ const PARTYLISTS = [
     image: "/PEAK/GROUP PHOTO/peakgrouptransparent.png",
     bgColor: "#34102A",
     accentColor: "#5493c0",
+    imageOffsetY: "-7%",       // Resting: slight upward nudge
+    imageHoverOffsetY: "-3%",  // Hover: barely any shift
   },
 ];
 
@@ -177,12 +182,16 @@ function CarouselSlide({ party, active, onClick }) {
             src={party.image}
             alt={`${party.label} partylist`}
             style={{
-              height: hovered ? "110%" : "95%",
+              height: hovered
+                ? `${115 * (party.imageScale ?? 1)}%`
+                : `${108 * (party.imageScale ?? 1)}%`,
               width: hovered ? "80%" : "100%",
               objectFit: "contain",
               objectPosition: "bottom center",
               opacity: hovered ? 1 : 0.45,
-              transform: hovered ? "scale(1.05)" : "scale(1)",
+              transform: hovered
+                ? `scale(1.05) translateY(${party.imageHoverOffsetY ?? "0%"})`
+                : `scale(1) translateY(${party.imageOffsetY ?? "0%"})`,
               transformOrigin: "bottom center",
               transition: T,
               maskImage: hovered

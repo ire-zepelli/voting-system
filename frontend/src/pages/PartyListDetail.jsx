@@ -107,7 +107,7 @@ function Section({ section, isLast }) {
         <div
           style={{
             position: "absolute",
-            top: "20%",
+            top: "30%", // Moved up so only heads overlap, not the whole body
             left: 0,
             right: 0,
             padding: "0 5vw",
@@ -139,15 +139,15 @@ function Section({ section, isLast }) {
           style={{
             position: "relative",
             zIndex: 2,
-            width: "92%",
+            width: "96%",
             margin: "0 auto",
-            paddingTop: "18vh", // breathing room for photos to overflow up
-            paddingBottom: "6vh",
+            paddingTop: "6vh",
+            paddingBottom: "4vh",
           }}
         >
           <MemberCardRow
             members={section.members}
-            rowHeight="clamp(260px, 42vh, 460px)"
+            rowHeight="clamp(380px, 70vh, 750px)"
             showName={true}
           />
         </div>
@@ -212,6 +212,7 @@ export default function PartyListDetail() {
         position: "relative",
       }}
     >
+      {/* Navbar — lives outside the zoom wrapper so it stays normal size */}
       <StickyHeader />
 
       {sections.map((section, i) => (
