@@ -21,12 +21,27 @@ This backend provides student registration, login, ballot submission, and result
   npm run dev
   ```
 
+## Deployment
+For cloud deployment, do not commit a `.env` file. Set the backend environment variables in your hosting provider instead.
+
+For Vercel or similar platforms, configure these server-side secrets:
+- `DATABASE_URL` or the individual `DB_*` values
+- `AUTH_TOKEN_SECRET`
+- `FRONTEND_URL`
+- `FRONTEND_URL_REGEX` if you want to allow preview domains such as Vercel branch deployments
+
+Example preview-domain regex:
+```env
+FRONTEND_URL_REGEX=^https://.*your-frontend-project.*\.vercel\.app$
+```
+
 ## Environment Variables
 Use either `DATABASE_URL` or the individual `DB_*` values.
 
 ```env
 PORT=5000
 FRONTEND_URL=http://localhost:5173
+FRONTEND_URL_REGEX=
 AUTH_TOKEN_SECRET=replace-with-a-long-random-secret
 DATABASE_URL=
 DB_HOST=
@@ -44,6 +59,8 @@ DB_PASSWORD=
 - `POST /api/votes` submits only the selected candidate IDs for the logged-in voter.
 - `GET /api/results` returns grouped election results.
 - `GET /api/health/db` checks the database connection.
+
+`FRONTEND_URL` accepts a comma-separated allowlist. `FRONTEND_URL_REGEX` accepts comma-separated regular expressions for dynamic preview URLs.
 
 ## Database Notes
 - Voters are stored in `voters`.

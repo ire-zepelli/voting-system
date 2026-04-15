@@ -7,15 +7,61 @@ const authRoutes = require("./routes/auth");
 const electionRoutes = require("./routes/election");
 
 const app = express();
-const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+
+function parseCsv(value = "") {
+  return value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function compileOriginPatterns(values) {
+  return values.flatMap((value) => {
+    try {
+      return [new RegExp(value)];
+    } catch (error) {
+      console.warn(`Ignoring invalid FRONTEND_URL_REGEX pattern: ${value}`);
+      return [];
+    }
+  });
+}
+
+const allowedOrigins = parseCsv(process.env.FRONTEND_URL || "http://localhost:5173");
+const allowedOriginPatterns = compileOriginPatterns(
+  parseCsv(process.env.FRONTEND_URL_REGEX || "")
+);
+const localhostOriginPattern = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i;
+
+function isAllowedOrigin(origin) {
+  if (!origin) {
+    return true;
+  }
+
+  if (allowedOrigins.includes("*") || allowedOrigins.includes(origin)) {
+    return true;
+  }
+
+  if (allowedOriginPatterns.some((pattern) => pattern.test(origin))) {
+    return true;
+  }
+
+  if (process.env.NODE_ENV !== "production" && localhostOriginPattern.test(origin)) {
+    return true;
+  }
+
+  return false;
+}
 
 // Middleware
 app.use(
   cors({
-    origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
+    origin(origin, callback) {
+      if (isAllowedOrigin(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
   })
 );
 app.use(express.json());
