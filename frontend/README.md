@@ -1,16 +1,24 @@
-# React + Vite
+# Voting System Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This frontend is a React and Vite client for the PSITS voting system. It handles student login, registration, ballot submission, results viewing, and party list pages while talking to the backend API.
 
-Currently, two official plugins are available:
+## Setup
+1. Install dependencies:
+	```sh
+	npm install
+	```
+2. Copy `.env.example` to `.env` and point `VITE_API_URL` to the backend server.
+3. Start the development server:
+	```sh
+	npm run dev
+	```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Environment Variable
 
-## React Compiler
+```env
+VITE_API_URL=http://localhost:5000
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Notes
+- The frontend expects the backend API to provide `/api/auth`, `/api/candidates`, `/api/votes`, and `/api/results`.
+- Candidate images are served from `frontend/public` and matched with the candidate records seeded in the backend SQL file.

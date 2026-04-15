@@ -3,11 +3,21 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { checkDatabaseConnection } = require("./db");
+const authRoutes = require("./routes/auth");
+const electionRoutes = require("./routes/election");
 
 const app = express();
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
+  })
+);
 app.use(express.json());
 
 // Environment variables
@@ -18,7 +28,10 @@ app.get("/", (req, res) => {
   res.json({
     message: "Server is running.",
     endpoints: {
-      api: "/api/test",
+      auth: "/api/auth/login",
+      candidates: "/api/candidates",
+      vote: "/api/votes",
+      results: "/api/results",
       database: "/api/health/db",
     },
   });
@@ -44,6 +57,9 @@ app.get("/api/health/db", async (req, res) => {
     });
   }
 });
+
+app.use("/api/auth", authRoutes);
+app.use("/api", electionRoutes);
 
 // Start server
 if (require.main === module) {

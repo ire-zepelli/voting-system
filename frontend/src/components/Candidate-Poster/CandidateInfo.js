@@ -1,76 +1,78 @@
 
+const defaultDescription =
+    "Candidate credentials are available through the linked poster and profile material.";
+
 export const BEATScandidates = [
     {
         title: "President",
         name: "CRISTA MONICA OSCAR",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Oscar.pdf"
-
     },
     {
         title: "Vice-President Internal",
         name: "DAN PIERRE O. POGOY",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Pogoy.pdf"
     },
     {
         title: "Vice-President External",
         name: "RYAN PACUMIO",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Pacumio.pdf"
     },
     {
         title: "Secretary",
         name: "MAY O. LAPEÑA",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Lapeña.pdf"
     },
     {
         title: "Public Information Officer",
         name: "FIONA M. MONILAR",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Monilar.pdf"
     },
     {
         title: "Treasurer",
         name: "KEITH RAMISES S. LATONIO",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Latonion.pdf"
     },
     {
         title: "Chief of Creatives",
         name: "HARRY O. CONDE",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Conde.pdf"
     },
     {
         title: "Auditor",
         name: "EMMANUEL FRANZ B. APAWAN",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Apawan.pdf"
     },
     {
         title: "Chief of Representative",
         name: "JHOVIEGEN N. CUYSONA",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Cuysona.pdf"
     },
     {
         title: "Chief of Students Development",
         name: "AIMEE GAYLE B. COGAL",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Cogal.pdf"
     },
     {
         title: "Academic Representative",
         name: "ROSE ANNE R. RESURRECCION",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Resurreccion.pdf"
     },
     {
         title: "CARES Representative",
         name: "MARY GRACE E. PATALINGHUG",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Patalinghug.pdf"
     },
 
@@ -79,68 +81,68 @@ export const BEATScandidates = [
 export const PEAKcandidates = [
     {
         title: "President",
-        name: "DARREN E. VILLANUEVA",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "DARREN VILLANUEVA",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/VILLANUEVA.pdf"
     },
     {
         title: "Vice-President Internal",
-        name: "ALTHEIA C. DAÑO",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "ALTHEIA DANO",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/DAÑO.pdf"
     },
     {
         title: "Vice-President External",
         name: "KANE HUXLEY BOOK",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/BOOK.pdf"
     },
     {
         title: "Secretary",
-        name: "DIANE M. MENDOZA",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "DIANE MENDOZA",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/MENDOZA.pdf"
     },
     {
         title: "Public Information Officer",
-        name: "JEA MARY TRIXY P. MAGALLANO",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "JEA MARY TRIXY MAGALLAND",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/MAGALLANO.pdf"
     },
     {
         title: "Treasurer",
-        name: "HANNY JANE T. ENRIQUEZ",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "HANNY JANE ENRIQUEZ",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/ENRIQUEZ.pdf"
     },
     {
         title: "Chief of Creatives",
-        name: "TRISTHAN MV. G. VILLAMOR",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "TRISTHAN MARK VINCENT VILLAMOR",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/VILLAMOR.pdf"
     },
     {
         title: "Auditor",
-        name: "MYKA ANGELA L. DUMAEL",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "MYKA ANGELA DUMAEL",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/DUMAEL.pdf"
     },
     {
         title: "Chief of Representative",
-        name: "ABIJAH SHEN V. REGADO",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "ABIJAH SHEN REGADO",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/REGADO.pdf"
     },
     {
         title: "Chief of Students Development",
         name: "JEOFF ANDREW DEMECILLO",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/Demecillo.pdf"
     },
     {
         title: "CARES Representative",
-        name: "NATHANIEL P. ORNOPIA",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
+        name: "NATHANIEL ORNOPIA",
+        description: defaultDescription,
         pdfLink: "../../public/pdf/ORNOP.pdf"
     },
 ];

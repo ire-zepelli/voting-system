@@ -26,6 +26,7 @@ export default function MemberCard({
   selected = false,
   onSelect,
   showName = false,
+  flipX = false,
 }) {
   const [hovered, setHovered] = React.useState(false);
   const s = SIZES[size] ?? SIZES.md;
@@ -158,7 +159,7 @@ export default function MemberCard({
           position: "absolute",
           top: 0,
           left: "50%",
-          transform: hovered ? "translateX(-50%) scale(1.08)" : "translateX(-50%) scale(1)",
+          transform: `translateX(-50%) scale(${flipX ? -1 : 1}, 1) scale(${hovered ? 1.08 : 1})`,
           width: size === "lg" ? "92%" : size === "sm" ? "78%" : "88%",
           height: "82%", // Pulled down slightly so only the head overlaps the title text
           zIndex: 2,

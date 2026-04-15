@@ -5,13 +5,15 @@ export default function Button({
   onClick,
   type = "button",
   className = "",
+  disabled = false,
   ...props
 }) {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`w-full bg-gradient-to-b from-[#FFA700] to-[#E58000] hover:opacity-90 text-black font-large py-3 rounded-lg cursor-pointer transition-all duration-200 ${className}`}
+      disabled={disabled}
+      className={`w-full bg-gradient-to-b from-[#FFA700] to-[#E58000] text-black font-large py-3 rounded-lg transition-all duration-200 ${disabled ? "opacity-60 cursor-not-allowed" : "hover:opacity-90 cursor-pointer"} ${className}`}
       style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
       {...props}
     >
