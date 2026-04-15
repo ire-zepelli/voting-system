@@ -22,3 +22,13 @@ VITE_API_URL=http://localhost:5000
 ## Notes
 - The frontend expects the backend API to provide `/api/auth`, `/api/candidates`, `/api/votes`, and `/api/results`.
 - Candidate images are served from `frontend/public` and matched with the candidate records seeded in the backend SQL file.
+
+## Deployment
+For cloud deployment, set `VITE_API_URL` in your frontend hosting provider instead of committing a local `.env` file.
+
+If you deploy the frontend to Vercel, [frontend/vercel.json](c:\BSIT\PSITS\voting-system\frontend\vercel.json) keeps React Router routes working on refresh and direct visits.
+
+Typical production value:
+```env
+VITE_API_URL=https://your-backend-project.vercel.app
+```
