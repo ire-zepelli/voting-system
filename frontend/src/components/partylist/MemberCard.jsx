@@ -119,8 +119,26 @@ export default function MemberCard({
           </div>
         )}
 
-        {/* ── Position label ── */}
-        <div style={{ textAlign: "center", padding: "0 0.4rem" }}>
+      </div>
+
+      {/* ── Position & Name Labels — floats on top of everything ── */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          paddingBottom: "1.6rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          textAlign: "center",
+          zIndex: 10, // Higher than photo (zIndex: 2)
+          pointerEvents: "none",
+        }}
+      >
+        <div style={{ padding: "0 0.4rem" }}>
           <span
             style={{
               fontFamily: "Inter, sans-serif",
@@ -128,7 +146,7 @@ export default function MemberCard({
               color: hovered ? "#fff" : "rgba(255,255,255,0.95)",
               fontSize: s.fontSize,
               fontWeight: 600,
-              letterSpacing: "0.08rm",
+              letterSpacing: "0.08em",
               lineHeight: 1.3,
               transition: "color 0.3s ease",
             }}
@@ -142,7 +160,7 @@ export default function MemberCard({
                 color: hovered ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.5)",
                 fontSize: s.nameFontSize,
                 fontWeight: 400,
-                marginTop: "0.45rem", // More space between role and name
+                marginTop: "0.45rem",
                 lineHeight: 1.2,
                 transition: "color 0.3s ease",
               }}
