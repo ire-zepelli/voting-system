@@ -1,33 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
 // ─── Party data ───────────────────────────────────────────────────────────────
-// To add real photos, import them at the top and set `image` to the import.
-// e.g.  import beatsPhoto from "../assets/beats-team.png";
-//       Then set  image: beatsPhoto
 const PARTYLISTS = [
   {
     id: "beats",
     label: "B.E.A.T.S.",
     image: "/BEATS/GROUP PHOTO/beatsgrouptransparent.png",
     bgColor: "#34102A",
-    fullName: "",
-    vision: "",
-    mission: [],
-    platform: [],
-    members: [],
+    accentColor: "#c0547a",
   },
   {
     id: "peak",
     label: "P.E.A.K.",
     image: "/PEAK/GROUP PHOTO/peakgrouptransparent.png",
     bgColor: "#34102A",
-    fullName: "",
-    vision: "",
-    mission: [],
-    platform: [],
-    members: [],
+    accentColor: "#5493c0",
   },
 ];
 
@@ -66,7 +56,7 @@ function TeamPhotoPlaceholder() {
           fontFamily: "Inter, sans-serif",
           color: "rgba(255,255,255,0.25)",
           fontSize: "0.68rem",
-          letterSpacing: "-3%",
+          letterSpacing: "0.1em",
         }}
       >
         TEAM PHOTO
@@ -75,69 +65,109 @@ function TeamPhotoPlaceholder() {
   );
 }
 
-// ─── Single partylist row ─────────────────────────────────────────────────────
-function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
-  const isHovered = hovered === party.id;
-  const isOther = hovered !== null && !isHovered;
-  const T = "all 0.8s cubic-bezier(0.25, 1, 0.5, 1)";
+// ─── Arrow button ─────────────────────────────────────────────────────────────
+function ArrowButton({ direction, onClick, disabled }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "3.2rem",
+        height: "3.2rem",
+        borderRadius: "50%",
+        border: "1px solid rgba(255,255,255,0.2)",
+        background: hov ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.07)",
+        color: disabled ? "rgba(255,255,255,0.2)" : "#fff",
+        cursor: disabled ? "default" : "pointer",
+        transition: "all 0.25s cubic-bezier(0.25,1,0.5,1)",
+        transform: hov && !disabled ? "scale(1.08)" : "scale(1)",
+        outline: "none",
+        flexShrink: 0,
+      }}
+      aria-label={direction === "left" ? "Previous party" : "Next party"}
+    >
+      {direction === "left" ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
+// ─── Carousel slide ───────────────────────────────────────────────────────────
+function CarouselSlide({ party, active, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const T = "all 0.75s cubic-bezier(0.25, 1, 0.5, 1)";
 
   return (
     <div
-      onClick={() => onClick(party.id)}
-      onMouseEnter={() => onEnter(party.id)}
-      onMouseLeave={onLeave}
       style={{
-        position: "relative",
-        flex: 1,
-        minHeight: "80vh", // Massive sections to fit the photos
-        overflow: "hidden",
-        background: party.bgColor, // Unimplement darkening
-        cursor: "pointer",
+        position: "absolute",
+        inset: 0,
+        background: party.bgColor,
         display: "flex",
         alignItems: "center",
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
-        willChange: "height, flex",
+        overflow: "hidden",
+        cursor: "pointer",
+        opacity: active ? 1 : 0,
+        pointerEvents: active ? "auto" : "none",
+        transition: "opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1)",
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={onClick}
     >
-      {/* Giant name */}
+      {/* Giant background label */}
       <span
         aria-hidden="true"
         style={{
           position: "absolute",
           top: "50%",
           left: "2rem",
-          transform: isHovered
-            ? "translate(10%, -50%) scale(2.2)" // Use transform scale for buttery smooth animation
+          transform: hovered
+            ? "translate(10%, -50%) scale(2.2)"
             : "translate(0%, -50%) scale(1)",
           transformOrigin: "left center",
-          zIndex: isHovered ? 1 : 10,
-          fontSize: "clamp(8rem,20vw,16rem)", // Enlarged texts
+          zIndex: hovered ? 1 : 10,
+          fontSize: "clamp(6rem, 18vw, 14rem)",
           fontWeight: "bold",
           fontFamily: "Inter, sans-serif",
-          color: isHovered ? "rgba(255,255,255,0.08)" : "#ffffff",
+          color: hovered ? "rgba(255,255,255,0.06)" : "#ffffff",
           lineHeight: "120%",
-          letterSpacing: "-0.08em", // Using em to ensure the sticked appearance in CSS
+          letterSpacing: "-0.08em",
           userSelect: "none",
           whiteSpace: "nowrap",
-          transition: "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), color 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
+          transition: "transform 0.75s cubic-bezier(0.25, 1, 0.5, 1), color 0.75s cubic-bezier(0.25, 1, 0.5, 1)",
           willChange: "transform, color",
           pointerEvents: "none",
         }}
       >
         {party.label}
       </span>
+
       {/* Team photo */}
       <div
         style={{
           position: "absolute",
           right: 0,
           bottom: 0,
-          width: isHovered ? "100%" : "60%",
+          width: hovered ? "100%" : "60%",
           height: "100%",
-          zIndex: isHovered ? 10 : 1,
+          zIndex: hovered ? 10 : 1,
           display: "flex",
-          justifyContent: isHovered ? "center" : "flex-end",
-          transition: "width 0.8s cubic-bezier(0.25, 1, 0.5, 1), justify-content 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
+          justifyContent: hovered ? "center" : "flex-end",
+          transition: "width 0.75s cubic-bezier(0.25, 1, 0.5, 1)",
           willChange: "width",
           pointerEvents: "none",
         }}
@@ -147,18 +177,18 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
             src={party.image}
             alt={`${party.label} partylist`}
             style={{
-              height: isHovered ? "110%" : "95%",
-              width: isHovered ? "80%" : "100%", // When hovered, it occupies 80% of center space.
-              objectFit: "contain", // Reverted to contain so no cropping occurs
-              objectPosition: "bottom center", // The absolute fix! Keeps the subjects anchored to the ground
-              opacity: isHovered ? 1 : 0.45,
-              transform: isHovered ? "scale(1.05)" : "scale(1)",
+              height: hovered ? "110%" : "95%",
+              width: hovered ? "80%" : "100%",
+              objectFit: "contain",
+              objectPosition: "bottom center",
+              opacity: hovered ? 1 : 0.45,
+              transform: hovered ? "scale(1.05)" : "scale(1)",
               transformOrigin: "bottom center",
               transition: T,
-              maskImage: isHovered
+              maskImage: hovered
                 ? "none"
                 : "linear-gradient(to right, transparent 0%, black 28%)",
-              WebkitMaskImage: isHovered
+              WebkitMaskImage: hovered
                 ? "none"
                 : "linear-gradient(to right, transparent 0%, black 28%)",
             }}
@@ -168,23 +198,49 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
             style={{
               display: "flex",
               alignItems: "flex-end",
-              justifyContent: isHovered ? "center" : "flex-end",
+              justifyContent: hovered ? "center" : "flex-end",
               width: "100%",
               height: "100%",
-              paddingRight: isHovered ? 0 : "2rem",
+              paddingRight: hovered ? 0 : "2rem",
               paddingBottom: "1.2rem",
             }}
           >
-            <div style={{
-              height: isHovered ? "85%" : "65%",
-              aspectRatio: "16/9",
-              maxWidth: "100%",
-              transition: T
-            }}>
+            <div style={{ height: hovered ? "85%" : "65%", aspectRatio: "16/9", maxWidth: "100%", transition: T }}>
               <TeamPhotoPlaceholder />
             </div>
           </div>
         )}
+      </div>
+
+      {/* "View Party" hint that appears on hover */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "2.5rem",
+          left: "2rem",
+          zIndex: 20,
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          opacity: hovered ? 1 : 0,
+          transform: hovered ? "translateY(0)" : "translateY(6px)",
+          transition: "opacity 0.4s ease, transform 0.4s ease",
+          pointerEvents: "none",
+        }}
+      >
+        <span style={{
+          fontFamily: "Inter, sans-serif",
+          fontSize: "0.95rem",
+          fontWeight: 500,
+          color: "rgba(255,255,255,0.85)",
+          letterSpacing: "0.05em",
+          textTransform: "uppercase",
+        }}>
+          View Party
+        </span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
       </div>
     </div>
   );
@@ -192,68 +248,119 @@ function PartyRow({ party, hovered, onEnter, onLeave, onClick }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export const PartyList = () => {
-  const [hovered, setHovered] = useState(null);
-  const hoverTimeoutRef = React.useRef(null);
+  const [current, setCurrent] = useState(0);
   const navigate = useNavigate();
+  const total = PARTYLISTS.length;
 
-  const handleEnter = (id) => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    hoverTimeoutRef.current = setTimeout(() => {
-      setHovered(id);
-    }, 40); // Small delay to avoid accidental hover reactions
-  };
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
 
-  const handleLeave = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    setHovered(null);
-  };
-
-  return <>
-    <div
-      style={{
-        background: "#34102A",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        fontFamily: "'Arial', sans-serif",
-      }}
-    >
-      {/* Sticky Header Wrapper */}
-      <div style={{ position: "sticky", top: 0, zIndex: 50, background: "#34102A" }}>
-        <Header />
-      </div>
-
-      {/* Title */}
-      <div style={{ padding: "1.2rem 2rem 0.4rem", flexShrink: 0 }}>
-        <h1 className="text-[40px] font-bold text-white mb-6 tracking-tight">
-          2026 Election Partylist
-        </h1>
-      </div>
-
-      {/* Partylist rows */}
+  return (
+    <>
       <div
         style={{
-          flex: 1,
+          background: "#34102A",
+          height: "100vh",
           display: "flex",
           flexDirection: "column",
+          fontFamily: "'Inter', sans-serif",
+          overflow: "hidden",
         }}
       >
-        {PARTYLISTS.map((party) => (
-          <PartyRow
-            key={party.id}
-            party={party}
-            hovered={hovered}
-            onEnter={handleEnter}
-            onLeave={handleLeave}
-            onClick={(id) => navigate(`/partylist/${id}`)}
-          />
-        ))}
+        {/* Sticky Header */}
+        <div style={{ position: "relative", zIndex: 50, background: "#34102A", flexShrink: 0 }}>
+          <Header />
+        </div>
+
+        {/* Title bar */}
+        <div style={{ padding: "1rem 2rem 0.75rem", flexShrink: 0 }}>
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
+              fontWeight: 700,
+              color: "#fff",
+              letterSpacing: "-0.03em",
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
+            2026 Election Partylist
+          </h1>
+        </div>
+
+        {/* Carousel area */}
+        <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+          {PARTYLISTS.map((party, idx) => (
+            <CarouselSlide
+              key={party.id}
+              party={party}
+              active={idx === current}
+              onClick={() => navigate(`/partylist/${party.id}`)}
+            />
+          ))}
+
+          {/* Left / Right controls */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "2rem",
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 30,
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <ArrowButton direction="left" onClick={prev} disabled={total <= 1} />
+
+            {/* Dot indicators */}
+            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              {PARTYLISTS.map((party, idx) => (
+                <button
+                  key={`dot-${party.id}`}
+                  onClick={() => setCurrent(idx)}
+                  aria-label={`Go to ${party.label}`}
+                  style={{
+                    width: idx === current ? "1.8rem" : "0.5rem",
+                    height: "0.5rem",
+                    borderRadius: "9999px",
+                    background: idx === current ? "#fff" : "rgba(255,255,255,0.35)",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.35s cubic-bezier(0.25, 1, 0.5, 1)",
+                    padding: 0,
+                    outline: "none",
+                  }}
+                />
+              ))}
+            </div>
+
+            <ArrowButton direction="right" onClick={next} disabled={total <= 1} />
+          </div>
+
+          {/* Party counter top-right */}
+          <div
+            style={{
+              position: "absolute",
+              top: "1.2rem",
+              right: "2rem",
+              zIndex: 30,
+              fontFamily: "Inter, sans-serif",
+              fontSize: "0.85rem",
+              color: "rgba(255,255,255,0.5)",
+              letterSpacing: "0.08em",
+              userSelect: "none",
+            }}
+          >
+            {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+          </div>
+        </div>
+
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
-  </>
-
+    </>
+  );
 };
 
 export default PartyList;
