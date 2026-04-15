@@ -160,6 +160,95 @@ function SkipConfirmationModal({
   );
 }
 
+function ReviewVotesModal({
+  selectedVotes,
+  positions,
+  onCancel,
+  onConfirm,
+  isSubmitting,
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#12030f]/80 px-4 py-6 backdrop-blur-sm">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="review-modal-title"
+        className="w-full max-w-3xl max-h-[90vh] flex flex-col rounded-[2rem] border border-white/10 bg-[#2D0D25] p-6 md:p-8 text-white shadow-[0_20px_80px_rgba(0,0,0,0.45)]"
+      >
+        <div className="flex items-start justify-between gap-6 shrink-0">
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#FFA700] mb-3">
+              Review Your Ballot
+            </p>
+            <h2 id="review-modal-title" className="text-3xl font-bold tracking-tight">
+              Vote Summary
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isSubmitting}
+            className="text-white/50 hover:text-white transition-colors text-sm uppercase tracking-[0.18em] disabled:opacity-40"
+          >
+            Close
+          </button>
+        </div>
+
+        <div className="mt-6 flex-1 overflow-y-auto pr-2 -mr-2">
+          <div className="grid gap-3 sm:grid-cols-2">
+            {positions.map((positionGroup) => {
+              const selectedId = selectedVotes[positionGroup.position];
+              const candidate = positionGroup.candidates.find(
+                (c) => c.id === selectedId
+              );
+
+              return (
+                <div
+                  key={positionGroup.position}
+                  className="rounded-xl border border-white/10 bg-white/5 p-4 flex flex-col"
+                >
+                  <span className="text-[10px] sm:text-xs uppercase tracking-wider text-white/50 mb-2">
+                    {positionGroup.title}
+                  </span>
+                  {candidate ? (
+                    <div>
+                      <div className="font-medium text-white">{candidate.name}</div>
+                      <div className="text-[10px] sm:text-xs text-[#FFA700] uppercase tracking-wider mt-1">
+                        {candidate.partylist}
+                      </div>
+                    </div>
+                  ) : (
+                    <span className="text-white/40 italic text-sm">Left Blank</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-8 shrink-0 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isSubmitting}
+            className="rounded-xl border border-white/15 px-5 py-3 text-white/80 hover:bg-white/5 transition-colors disabled:opacity-40"
+          >
+            Edit Ballot
+          </button>
+          <Button
+            type="button"
+            className="sm:w-auto px-6"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Confirm & Submit"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Voting() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -169,6 +258,7 @@ export default function Voting() {
   const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
   const [statusMessage, setStatusMessage] = useState("");
   const [confirmationState, setConfirmationState] = useState(null);
+  const [isReviewingVotes, setIsReviewingVotes] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["candidates"],
@@ -286,7 +376,7 @@ export default function Voting() {
     }
 
     setStatusMessage("");
-    voteMutation.mutate(buildCandidateIds());
+    setIsReviewingVotes(true);
   };
 
   const handleNext = () => {
@@ -322,6 +412,11 @@ export default function Voting() {
       return;
     }
 
+    setStatusMessage("");
+    setIsReviewingVotes(true);
+  };
+
+  const handleFinalSubmit = () => {
     setStatusMessage("");
     voteMutation.mutate(buildCandidateIds());
   };
@@ -449,6 +544,16 @@ export default function Voting() {
         onConfirm={handleConfirmedProceed}
         isSubmitting={voteMutation.isPending}
       />
+
+      {isReviewingVotes && (
+        <ReviewVotesModal
+          selectedVotes={selectedVotes}
+          positions={positions}
+          onCancel={() => setIsReviewingVotes(false)}
+          onConfirm={handleFinalSubmit}
+          isSubmitting={voteMutation.isPending}
+        />
+      )}
 
       <Footer />
     </div>
