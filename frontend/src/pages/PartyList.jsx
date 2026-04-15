@@ -2,29 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
-// ─── Party data ───────────────────────────────────────────────────────────────
-const PARTYLISTS = [
-  {
-    id: "beats",
-    label: "B.E.A.T.S.",
-    image: "/BEATS/GROUP PHOTO/beatsgrouptransparent.png",
-    bgColor: "#34102A",
-    accentColor: "#c0547a",
-    imageScale: 1.55,
-    imageOffsetY: "-32%",      // Resting: pull photo up
-    imageHoverOffsetY: "-15.5%", // Hover: lighter shift so photo isn't cut
-  },
-  {
-    id: "peak",
-    label: "P.E.A.K.",
-    image: "/PEAK/GROUP PHOTO/peakgrouptransparent.png",
-    bgColor: "#34102A",
-    accentColor: "#5493c0",
-    imageOffsetY: "-7%",       // Resting: slight upward nudge
-    imageHoverOffsetY: "-3%",  // Hover: barely any shift
-  },
-];
+import { PARTYLISTS } from "../data/election";
 
 // ─── Team photo placeholder ───────────────────────────────────────────────────
 function TeamPhotoPlaceholder() {

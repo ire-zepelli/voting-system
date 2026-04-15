@@ -1,11 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import CandidatesBanner from "../components/Voting/CandidatesBanner";
-import test_candidate_picture from "../assets/test_candidate_picture.png";
 import uclmccs from "../assets/uclmccs.png";
 import uclmpsits from "../assets/uclmpsits.png";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
+import { useAuth } from "../context/useAuth";
+import { groupCandidatesByPosition } from "../data/election";
+import { apiRequest } from "../lib/api";
 
 const FadeInOnScroll = ({ children }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -41,249 +45,261 @@ const FadeInOnScroll = ({ children }) => {
   );
 };
 
-export default function Voting() {
-  const [selectedVotes, setSelectedVotes] = useState({});
-  const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
+function VotingState({ title, message, actionLabel, onAction }) {
+  return (
+    <div className="flex flex-col min-h-screen bg-[#34102A] text-white">
+      <Header />
+      <main className="flex-1 flex items-center justify-center px-6 text-center">
+        <div className="max-w-xl">
+          <h1 className="text-4xl font-bold tracking-tight mb-4">{title}</h1>
+          <p className="text-white/75 leading-relaxed mb-8">{message}</p>
+          {actionLabel && onAction && (
+            <div className="max-w-xs mx-auto">
+              <Button onClick={onAction}>{actionLabel}</Button>
+            </div>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
 
-  const handleVote = (groupId, candidateId) => {
+function SkipConfirmationModal({
+  confirmationState,
+  onCancel,
+  onConfirm,
+  isSubmitting,
+}) {
+  if (!confirmationState) {
+    return null;
+  }
+
+  const { mode, positions } = confirmationState;
+  const isSinglePosition = positions.length === 1;
+  const title =
+    mode === "next"
+      ? `Skip ${positions[0]}?`
+      : "Submit Ballot With Blank Positions?";
+  const description =
+    mode === "next"
+      ? `You have not selected a candidate for ${positions[0]}. If you continue, this position will be left blank. Only selected candidates will be recorded when you submit your ballot.`
+      : `You still have ${positions.length} ${positions.length === 1 ? "position" : "positions"} without a selected candidate. If you continue, those positions will be left blank and only your selected candidates will be recorded.`;
+  const confirmLabel =
+    mode === "next" ? "Continue Without Selecting" : "Submit Selected Votes";
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#12030f]/80 px-4 backdrop-blur-sm">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="skip-modal-title"
+        className="w-full max-w-2xl rounded-[2rem] border border-white/10 bg-[#2D0D25] p-6 md:p-8 text-white shadow-[0_20px_80px_rgba(0,0,0,0.45)]"
+      >
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#FFA700] mb-3">
+              Confirmation Required
+            </p>
+            <h2 id="skip-modal-title" className="text-3xl font-bold tracking-tight">
+              {title}
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isSubmitting}
+            className="text-white/50 hover:text-white transition-colors text-sm uppercase tracking-[0.18em] disabled:opacity-40"
+          >
+            Close
+          </button>
+        </div>
+
+        <p className="mt-5 text-white/75 leading-relaxed">
+          {description}
+        </p>
+
+        {!isSinglePosition && (
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
+            <p className="text-sm uppercase tracking-[0.18em] text-white/55 mb-3">
+              Positions To Leave Blank
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {positions.map((position) => (
+                <span
+                  key={position}
+                  className="rounded-full border border-[#FFA700]/25 bg-[#FFA700]/10 px-3 py-1 text-sm text-[#FFD68A]"
+                >
+                  {position}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isSubmitting}
+            className="rounded-xl border border-white/15 px-5 py-3 text-white/80 hover:bg-white/5 transition-colors disabled:opacity-40"
+          >
+            Go Back And Review
+          </button>
+          <Button
+            type="button"
+            className="sm:w-auto px-6"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Processing..." : confirmLabel}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Voting() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { token, updateUser, user } = useAuth();
+  const [selectedVotes, setSelectedVotes] = useState({});
+  const [skippedPositions, setSkippedPositions] = useState({});
+  const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [confirmationState, setConfirmationState] = useState(null);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["candidates"],
+    queryFn: () => apiRequest("/api/candidates"),
+  });
+
+  const positions = groupCandidatesByPosition(data?.candidates || []);
+  const currentPosition = positions[currentPositionIndex];
+  const selectedCount = positions.filter(
+    (positionGroup) => selectedVotes[positionGroup.position]
+  ).length;
+  const skippedCount = positions.filter(
+    (positionGroup) => skippedPositions[positionGroup.position]
+  ).length;
+  const reviewedCount = positions.filter(
+    (positionGroup) =>
+      selectedVotes[positionGroup.position] || skippedPositions[positionGroup.position]
+  ).length;
+  const unresolvedPositions = positions
+    .filter(
+      (positionGroup) =>
+        !selectedVotes[positionGroup.position] &&
+        !skippedPositions[positionGroup.position]
+    )
+    .map((positionGroup) => positionGroup.position);
+  const isCurrentPositionSelected = Boolean(
+    currentPosition && selectedVotes[currentPosition.position]
+  );
+  const isCurrentPositionSkipped = Boolean(
+    currentPosition && skippedPositions[currentPosition.position]
+  );
+
+  const voteMutation = useMutation({
+    mutationFn: (candidateIds) =>
+      apiRequest("/api/votes", {
+        method: "POST",
+        token,
+        body: { candidateIds },
+      }),
+    onSuccess: (response) => {
+      updateUser(response.user);
+      queryClient.invalidateQueries({ queryKey: ["results"] });
+      navigate("/results", { replace: true });
+    },
+    onError: (mutationError) => {
+      setStatusMessage(mutationError.message);
+    },
+  });
+
+  const handleVote = (position, candidateId) => {
+    const nextCandidateId = selectedVotes[position] === candidateId ? null : candidateId;
+
+    setStatusMessage("");
     setSelectedVotes((prev) => ({
       ...prev,
-      [groupId]: prev[groupId] === candidateId ? null : candidateId,
+      [position]: nextCandidateId,
     }));
+    setSkippedPositions((prev) => {
+      if (!prev[position]) {
+        return prev;
+      }
+
+      const next = { ...prev };
+      delete next[position];
+      return next;
+    });
   };
 
-  const candidates = [
-    {
-      id: 1,
-      position: "President",
-      title: "PRESIDENT",
-      candidates: [
-        {
-          id: 1,
-          fname: "Crista Monica",
-          lname: "Oscar",
-          image: "/BEATS/TRANSPARENT_INDIV/OSCAR_PRES.png",
-        },
-        {
-          id: 2,
-          fname: "Darren",
-          lname: "Villanueva",
-          image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/PRES- VILLANUEVA_.png",
-        },
-      ],
-    },
-    {
-      id: 2,
-      position: "Vice President Internal",
-      title: "VP-INTERNAL",
-      candidates: [
-        {
-          id: 1,
-          fname: "Dan Pierre",
-          lname: "Pogoy",
-          image: "/BEATS/TRANSPARENT_INDIV/POGOY_VP_INTERNAL.png",
-        },
-        {
-          id: 2,
-          fname: "Altheia",
-          lname: "Daño",
-          image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP INTERNAL- DANO.png",
-        },
-      ],
-    },
-    {
-      id: 3,
-      position: "Vice President External",
-      title: "VP-EXTERNAL",
-      candidates: [
-        {
-          id: 1,
-          fname: "Ryan",
-          lname: "Pacumio",
-          image: "/BEATS/TRANSPARENT_INDIV/PACUMIO_VP_EXTERNAL.png",
-        },
-        {
-          id: 2,
-          fname: "Kane Huxley",
-          lname: "Book",
-          image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP EXTERNAL - BOOK.png",
-        },
-      ],
-    },
-    {
-      id: 4,
-      position: "Secretary",
-      title: "SECRETARY",
-      candidates: [
-        {
-          id: 1,
-          fname: "May",
-          lname: "Lapeña",
-          image: "/BEATS/TRANSPARENT_INDIV/LAPENA_SECRETARY.png",
-        },
-        {
-          id: 2,
-          fname: "Diane",
-          lname: "Mendoza",
-          image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/SECRETARY - MENDOZA_.png",
-        },
-      ],
-    },
-    {
-      id: 5,
-      position: "Treasurer",
-      title: "TREASURER",
-      candidates: [
-        {
-          id: 1,
-          fname: "Keith Ramises",
-          lname: "Latonio",
-          image: "/BEATS/TRANSPARENT_INDIV/LATONIO_TREASURER.png",
-        },
-        {
-          id: 2,
-          fname: "Hanny Jane",
-          lname: "Enriquez",
-          image:
-            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/TREASURER - ENRIQUEZ_.png",
-        },
-      ],
-    },
-    {
-      id: 6,
-      position: "Auditor",
-      title: "AUDITOR",
-      candidates: [
-        {
-          id: 1,
-          fname: "Emmanuel Franz",
-          lname: "Apawan",
-          image: "/BEATS/TRANSPARENT_INDIV/APAWAN_AUDITOR.png",
-        },
-        {
-          id: 2,
-          fname: "Myka Angela",
-          lname: "Dumael",
-          image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/AUDIT- DUMAEL.png",
-        },
-      ],
-    },
-    {
-      id: 7,
-      position: "Public Information Officer",
-      title: "PUBLIC INFORMATION \nOFFICER",
-      candidates: [
-        {
-          id: 1,
-          fname: "Fiona",
-          lname: "Monilar",
-          image: "/BEATS/TRANSPARENT_INDIV/MONILAR_PIO.png",
-        },
-        {
-          id: 2,
-          fname: "Jea Mary Trixy",
-          lname: "Magallano",
-          image:
-            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/P.I OFFICER- MAGALLANO.png",
-        },
-      ],
-    },
-    {
-      id: 8,
-      position: "Chief of Creatives",
-      title: "CHIEF OF\nCREATIVES",
-      candidates: [
-        {
-          id: 1,
-          fname: "Harry",
-          lname: "Conde",
-          image: "/BEATS/TRANSPARENT_INDIV/CONDE_CHIEF_OF_CREATIVES.png",
-        },
-        {
-          id: 2,
-          fname: "Tristhan",
-          lname: "Villamor",
-          image:
-            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CREATIVES - VILLAMOR_.png",
-        },
-      ],
-    },
-    {
-      id: 9,
-      position: "Chief of Representatives",
-      title: "CHIEF OF\nREPRESENTATIVES",
-      candidates: [
-        {
-          id: 1,
-          fname: "Jhoviegen",
-          lname: "Cuysona",
-          image: "/BEATS/TRANSPARENT_INDIV/CUYSONA_CHIEF_OF_REP.png",
-        },
-        {
-          id: 2,
-          fname: "Abijah Shen",
-          lname: "Regado",
-          image:
-            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/REPRESENTATIVE - REGADO.png",
-        },
-      ],
-    },
-    {
-      id: 10,
-      position: "Chief of Students Develeopment",
-      title: "CHIEF OF\nSTUDENTS DEVELOPMENT",
-      candidates: [
-        {
-          id: 1,
-          fname: "Aimee Gayle",
-          lname: "Cogal",
-          image: "/BEATS/TRANSPARENT_INDIV/COGAL_CHIEF_OF_STUDENTDEV.png",
-        },
-        {
-          id: 2,
-          fname: "Jeoff Andrew",
-          lname: "Demecillo",
-          image:
-            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/DEVELOPMENT - DEMECILLO.png",
-        },
-      ],
-    },
-    {
-      id: 11,
-      position: "Academic Representative",
-      title: "ACADEMIC\nREPRESENTATIVE",
-      candidates: [
-        {
-          id: 1,
-          fname: "Rose Anne",
-          lname: "Resurreccion",
-          image: "/BEATS/TRANSPARENT_INDIV/RESURRECCION_ACADEMIC_REP.png",
-        },
-      ],
-    },
-    {
-      id: 12,
-      position: "CARES Representative",
-      title: "CARES\nREPRESENTATIVE",
-      candidates: [
-        {
-          id: 1,
-          fname: "Mary Grace",
-          lname: "Patalinghug",
-          image: "/BEATS/TRANSPARENT_INDIV/PATALINGHUG_CARE_REP.png",
-        },
-        {
-          id: 2,
-          fname: "Nathaniel",
-          lname: "Ornopia",
-          image: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CARES REP- ORNOPIA.png",
-        },
-      ],
-    },
-  ];
+  const markPositionsSkipped = (positionsToSkip) => {
+    setSkippedPositions((prev) => {
+      const next = { ...prev };
+
+      positionsToSkip.forEach((position) => {
+        next[position] = true;
+      });
+
+      return next;
+    });
+  };
+
+  const buildCandidateIds = () => Object.values(selectedVotes).filter(Boolean);
+
+  const requestConfirmation = (mode, positionsToConfirm) => {
+    setConfirmationState({ mode, positions: positionsToConfirm });
+  };
+
+  const closeConfirmation = () => {
+    if (voteMutation.isPending) {
+      return;
+    }
+
+    setConfirmationState(null);
+  };
+
+  const handleConfirmedProceed = () => {
+    if (!confirmationState) {
+      return;
+    }
+
+    const { mode, positions: positionsToSkip } = confirmationState;
+    markPositionsSkipped(positionsToSkip);
+    setConfirmationState(null);
+
+    if (mode === "next") {
+      setStatusMessage(
+        `${positionsToSkip[0]} will be left blank. You can still go back and choose a candidate before final submission.`
+      );
+
+      if (currentPositionIndex < positions.length - 1) {
+        setCurrentPositionIndex(currentPositionIndex + 1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      return;
+    }
+
+    setStatusMessage("");
+    voteMutation.mutate(buildCandidateIds());
+  };
 
   const handleNext = () => {
-    if (currentPositionIndex < candidates.length - 1) {
+    if (!currentPosition) {
+      return;
+    }
+
+    if (!isCurrentPositionSelected && !isCurrentPositionSkipped) {
+      requestConfirmation("next", [currentPosition.position]);
+      return;
+    }
+
+    if (currentPositionIndex < positions.length - 1) {
       setCurrentPositionIndex(currentPositionIndex + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -295,6 +311,60 @@ export default function Voting() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
+
+  const handleSubmit = () => {
+    if (!positions.length) {
+      return;
+    }
+
+    if (unresolvedPositions.length > 0) {
+      requestConfirmation("submit", unresolvedPositions);
+      return;
+    }
+
+    setStatusMessage("");
+    voteMutation.mutate(buildCandidateIds());
+  };
+
+  if (user?.hasVoted) {
+    return (
+      <VotingState
+        title="Ballot Already Submitted"
+        message="This account has already completed the election ballot. You can still view the live results."
+        actionLabel="View Results"
+        onAction={() => navigate("/results")}
+      />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <VotingState
+        title="Loading Ballot"
+        message="The candidate list is being prepared."
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <VotingState
+        title="Unable To Load Ballot"
+        message={error.message}
+        actionLabel="Try Again"
+        onAction={() => queryClient.invalidateQueries({ queryKey: ["candidates"] })}
+      />
+    );
+  }
+
+  if (!currentPosition) {
+    return (
+      <VotingState
+        title="No Candidates Available"
+        message="The ballot has not been seeded in the database yet. Run the backend SQL setup first."
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col">
@@ -312,16 +382,41 @@ export default function Voting() {
         />
       </div>
       <div className="flex flex-col min-h-[50vh]">
-        <FadeInOnScroll key={candidates[currentPositionIndex].id}>
+        <div className="px-6 md:px-14 pt-4 text-white/80 text-sm tracking-wide flex justify-between gap-4">
+          <span>
+            Ballot progress: {reviewedCount} / {positions.length} reviewed
+          </span>
+          <span>
+            Selected: {selectedCount} | Left blank: {skippedCount}
+          </span>
+        </div>
+
+        <div className="px-6 md:px-14 pt-2 text-white/60 text-sm tracking-wide flex justify-end">
+          <span>
+            {currentPositionIndex + 1} of {positions.length}
+          </span>
+        </div>
+
+        {statusMessage && (
+          <div className="mx-6 md:mx-14 mt-4 rounded-xl border border-[#FFA700]/30 bg-[#FFA700]/10 px-4 py-3 text-sm text-[#FFD68A]">
+            {statusMessage}
+          </div>
+        )}
+
+        {isCurrentPositionSkipped && !isCurrentPositionSelected && (
+          <div className="mx-6 md:mx-14 mt-4 rounded-xl border border-sky-300/20 bg-sky-400/10 px-4 py-3 text-sm text-sky-100">
+            {currentPosition.position} is currently left blank. You can still select a candidate before submitting your ballot.
+          </div>
+        )}
+
+        <FadeInOnScroll key={currentPosition.id}>
           <CandidatesBanner
-            title={candidates[currentPositionIndex].title}
-            position={candidates[currentPositionIndex].position}
-            candidates={candidates[currentPositionIndex].candidates}
-            selectedCandidateId={
-              selectedVotes[candidates[currentPositionIndex].id]
-            }
+            title={currentPosition.title}
+            position={currentPosition.position}
+            candidates={currentPosition.candidates}
+            selectedCandidateId={selectedVotes[currentPosition.position]}
             onSelectCandidate={(candidateId) =>
-              handleVote(candidates[currentPositionIndex].id, candidateId)
+              handleVote(currentPosition.position, candidateId)
             }
           />
         </FadeInOnScroll>
@@ -330,21 +425,30 @@ export default function Voting() {
       <div className="flex flex-row justify-center gap-6 md:gap-12 w-full px-4 mb-2">
         {currentPositionIndex > 0 && (
           <div className="w-48 md:w-[250px]">
-            <Button className="w-full" onClick={handleBack}>
+            <Button className="w-full" onClick={handleBack} disabled={voteMutation.isPending}>
               Back
             </Button>
           </div>
         )}
         <div className="w-48 md:w-[250px]">
-          {currentPositionIndex < candidates.length - 1 ? (
-            <Button className="w-full" onClick={handleNext}>
+          {currentPositionIndex < positions.length - 1 ? (
+            <Button className="w-full" onClick={handleNext} disabled={voteMutation.isPending}>
               Next
             </Button>
           ) : (
-            <Button className="w-full">Submit</Button>
+            <Button className="w-full" onClick={handleSubmit} disabled={voteMutation.isPending}>
+              {voteMutation.isPending ? "Submitting..." : "Submit"}
+            </Button>
           )}
         </div>
       </div>
+
+      <SkipConfirmationModal
+        confirmationState={confirmationState}
+        onCancel={closeConfirmation}
+        onConfirm={handleConfirmedProceed}
+        isSubmitting={voteMutation.isPending}
+      />
 
       <Footer />
     </div>

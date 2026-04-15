@@ -1,13 +1,17 @@
 import React from "react";
-import test_candidate_picture from "../assets/test_candidate_picture.png";
 
 export default function CandidateCard({
+  name,
   fname,
   lname,
   image,
   isSelected,
   onClick,
 }) {
+  const firstName = fname || name;
+  const lastName = lname || "";
+  const fullName = [firstName, lastName].filter(Boolean).join(" ");
+
   return (
     <div
       onClick={onClick}
@@ -19,7 +23,7 @@ export default function CandidateCard({
         <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-45 h-65 z-10">
           <div className="relative w-full h-full">
             <img
-              alt="Candidate"
+              alt={fullName}
               className="w-full h-full rounded-xl object-cover editorial-shadow"
               src={image}
             />
@@ -30,8 +34,8 @@ export default function CandidateCard({
             className={`text-lg w-40 font-thin tracking-wide leading-none mb-4 ${isSelected ? "text-black font-normal" : "text-white"}`}
           >
             <div className="flex flex-col gap-2 w-full mt-6">
-              <span className="text-md font-thin">{fname}</span>
-              <span className="text-md font-thin">{lname}</span>
+              <span className="text-md font-thin">{firstName}</span>
+              {lastName && <span className="text-md font-thin">{lastName}</span>}
             </div>
           </h1>
         </div>

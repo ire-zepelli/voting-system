@@ -30,6 +30,7 @@ export default function CandidatesBanner({
         {candidates.map((candidate) => (
           <CandidateCard
             key={candidate.id}
+            name={candidate.name}
             fname={candidate.fname}
             lname={candidate.lname}
             image={candidate.image}
