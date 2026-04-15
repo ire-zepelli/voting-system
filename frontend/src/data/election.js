@@ -114,6 +114,25 @@ export function getPositionDisplayTitle(position) {
   return POSITION_TITLES[position] || position.toUpperCase();
 }
 
+function splitCandidateName(name) {
+  const parts = String(name || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (parts.length <= 1) {
+    return {
+      fname: name,
+      lname: "",
+    };
+  }
+
+  return {
+    fname: parts.slice(0, -1).join(" "),
+    lname: parts[parts.length - 1],
+  };
+}
+
 export function groupCandidatesByPosition(candidates) {
   return POSITION_ORDER.map((position) => {
     const matchingCandidates = candidates.filter(
@@ -128,12 +147,18 @@ export function groupCandidatesByPosition(candidates) {
       id: position,
       position,
       title: getPositionDisplayTitle(position),
-      candidates: matchingCandidates.map((candidate) => ({
-        id: candidate.id,
-        name: candidate.name,
-        partylist: candidate.partylist,
-        image: candidate.imagePath,
-      })),
+      candidates: matchingCandidates.map((candidate) => {
+        const { fname, lname } = splitCandidateName(candidate.name);
+
+        return {
+          id: candidate.id,
+          name: candidate.name,
+          fname,
+          lname,
+          partylist: candidate.partylist,
+          image: candidate.imagePath,
+        };
+      }),
     };
   }).filter(Boolean);
 }
