@@ -6,6 +6,7 @@ function ResultsCard({ text, voteNum, percentage }) {
   const parts = rawText.split(" - ");
   const name = parts[0];
   const partyContainer = parts.length > 1 ? parts[1] : "";
+<<<<<<< HEAD
 
   // Some parties in standard text say 'Partylistv' or 'Partylist'
   const party = partyContainer.replace(/partylistv?/i, '').trim();
@@ -23,6 +24,25 @@ function ResultsCard({ text, voteNum, percentage }) {
     ? "bg-rose-500/20 text-rose-200 border-rose-500/30"
     : isPeak
       ? "bg-cyan-500/20 text-cyan-200 border-cyan-500/30"
+=======
+  
+  // Some parties in standard text say 'Partylistv' or 'Partylist'
+  const party = partyContainer.replace(/partylistv?/i, '').trim(); 
+
+  const isBeats = party.toLowerCase().includes("b.e.a.t.s");
+  const isPeak = party.toLowerCase().includes("p.e.a.k");
+  
+  const progressBarGradient = isBeats 
+    ? "from-pink-500 to-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.6)]" 
+    : isPeak
+      ? "from-blue-500 to-cyan-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]"
+      : "from-purple-500 to-indigo-400 shadow-[0_0_12px_rgba(168,85,247,0.6)]";
+      
+  const partyAccentColor = isBeats 
+    ? "bg-rose-500/20 text-rose-200 border-rose-500/30" 
+    : isPeak 
+      ? "bg-cyan-500/20 text-cyan-200 border-cyan-500/30" 
+>>>>>>> d677bb15c4f592c6beaec4b108ed71e7d864c94c
       : "bg-white/10 text-gray-200 border-white/20";
 
   // Clean percentage text (e.g. "100      %" to "100%")
@@ -32,7 +52,11 @@ function ResultsCard({ text, voteNum, percentage }) {
     <div className="group relative bg-[#4F1F73]/80 hover:bg-[#5C2785] transition-all duration-300 w-full rounded-2xl flex flex-col justify-between gap-5 p-6 sm:p-8 border border-white/10 hover:border-white/30 overflow-hidden shadow-lg hover:shadow-2xl h-full min-h-[180px] sm:min-h-[220px]">
       {/* Background glow effect based on party */}
       <div className={`absolute -bottom-10 -right-10 w-40 h-40 blur-[80px] rounded-full opacity-30 transition-opacity duration-300 group-hover:opacity-50 ${isBeats ? 'bg-pink-600' : isPeak ? 'bg-cyan-600' : 'bg-purple-600'} pointer-events-none`}></div>
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> d677bb15c4f592c6beaec4b108ed71e7d864c94c
       <div className="relative z-10 flex flex-col gap-3">
         <p className="text-xl sm:text-2xl font-bold text-white leading-snug break-words drop-shadow-md">
           {name}
@@ -43,7 +67,11 @@ function ResultsCard({ text, voteNum, percentage }) {
           </span>
         )}
       </div>
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> d677bb15c4f592c6beaec4b108ed71e7d864c94c
       <div className="mt-8 relative z-10">
         <div className="flex flex-row justify-between items-end w-full mb-3">
           <div className="flex flex-col">
@@ -58,7 +86,11 @@ function ResultsCard({ text, voteNum, percentage }) {
             {cleanPercentage}
           </p>
         </div>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> d677bb15c4f592c6beaec4b108ed71e7d864c94c
         <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden shadow-inner p-[2px]">
           <div
             style={{ width: `${cleanPercentage}` }}
