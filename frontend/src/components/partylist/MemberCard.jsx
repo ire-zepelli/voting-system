@@ -15,9 +15,9 @@ import React from "react";
  */
 
 const SIZES = {
-  sm: { fontSize: "0.6rem", nameFontSize: "0.52rem", iconSize: 24 },
-  md: { fontSize: "0.72rem", nameFontSize: "0.62rem", iconSize: 32 },
-  lg: { fontSize: "0.84rem", nameFontSize: "0.72rem", iconSize: 42 },
+  sm: { fontSize: "0.75rem", nameFontSize: "0.65rem", iconSize: 26 },
+  md: { fontSize: "0.95rem", nameFontSize: "0.80rem", iconSize: 36 },
+  lg: { fontSize: "1.15rem", nameFontSize: "1.0rem", iconSize: 48 },
 };
 
 export default function MemberCard({
@@ -27,6 +27,7 @@ export default function MemberCard({
   onSelect,
   showName = false,
 }) {
+  const [hovered, setHovered] = React.useState(false);
   const s = SIZES[size] ?? SIZES.md;
   const clickable = typeof onSelect === "function";
 
@@ -39,12 +40,16 @@ export default function MemberCard({
      */
     <div
       onClick={clickable ? onSelect : undefined}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         fontFamily: "Inter, sans-serif",
         position: "relative",
         width: "100%",
         height: "100%",
         cursor: clickable ? "pointer" : "default",
+        transition: "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
+        transform: hovered ? "translateY(-12px) scale(1.04)" : "translateY(0) scale(1)",
       }}
     >
       {/* ── Card body ── */}
@@ -54,25 +59,31 @@ export default function MemberCard({
           bottom: 0,
           left: 0,
           right: 0,
-          height: "58%",
+          height: "64%",
           background: selected
-            ? "rgba(160, 40, 100, 0.55)"
-            : "rgba(44, 6, 33, 0.92)",
+            ? "rgba(160, 40, 100, 0.65)"
+            : hovered
+              ? "rgba(54, 8, 41, 0.98)"
+              : "rgba(44, 6, 33, 0.92)",
           border: selected
-            ? "1.5px solid rgba(255,160,200,0.7)"
-            : "1px solid rgba(255,255,255,0.13)",
+            ? "1.5px solid rgba(255,160,200,0.8)"
+            : hovered
+              ? "1px solid rgba(255,140,190,0.3)"
+              : "1px solid rgba(255,255,255,0.13)",
           borderRadius: "1rem",
           boxShadow: selected
-            ? "0 0 24px rgba(255,100,180,0.25)"
-            : size === "lg"
-              ? "0 8px 40px rgba(0,0,0,0.55)"
-              : "0 4px 20px rgba(0,0,0,0.4)",
+            ? "0 0 24px rgba(255,100,180,0.35)"
+            : hovered
+              ? "0 12px 48px rgba(0,0,0,0.6)"
+              : size === "lg"
+                ? "0 8px 40px rgba(0,0,0,0.55)"
+                : "0 4px 20px rgba(0,0,0,0.4)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-end",
-          paddingBottom: "0.75rem",
-          transition: "background 0.25s, border-color 0.25s, box-shadow 0.25s",
+          paddingBottom: "1.6rem",
+          transition: "all 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
           overflow: "visible",
         }}
       >
@@ -113,11 +124,12 @@ export default function MemberCard({
             style={{
               fontFamily: "Inter, sans-serif",
               display: "block",
-              color: "#fff",
+              color: hovered ? "#fff" : "rgba(255,255,255,0.95)",
               fontSize: s.fontSize,
               fontWeight: 600,
               letterSpacing: "0.08rm",
               lineHeight: 1.3,
+              transition: "color 0.3s ease",
             }}
           >
             {member.position}
@@ -126,11 +138,12 @@ export default function MemberCard({
             <span
               style={{
                 display: "block",
-                color: "rgba(255,255,255,0.5)",
+                color: hovered ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.5)",
                 fontSize: s.nameFontSize,
                 fontWeight: 400,
-                marginTop: "0.15rem",
+                marginTop: "0.45rem", // More space between role and name
                 lineHeight: 1.2,
+                transition: "color 0.3s ease",
               }}
             >
               {member.name}
@@ -145,14 +158,15 @@ export default function MemberCard({
           position: "absolute",
           top: 0,
           left: "50%",
-          transform: "translateX(-50%)",
-          width: size === "lg" ? "82%" : size === "sm" ? "70%" : "76%",
-          height: "72%", // spans top 72% of slot; bottom 30% is inside card
+          transform: hovered ? "translateX(-50%) scale(1.08)" : "translateX(-50%) scale(1)",
+          width: size === "lg" ? "92%" : size === "sm" ? "78%" : "88%",
+          height: "82%", // Pulled down slightly so only the head overlaps the title text
           zIndex: 2,
           display: "flex",
           alignItems: "flex-end",
           justifyContent: "center",
           pointerEvents: "none",
+          transition: "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
         }}
       >
         {member.photo ? (
@@ -165,6 +179,8 @@ export default function MemberCard({
               objectFit: "cover",
               objectPosition: "top center",
               display: "block",
+              filter: hovered ? "brightness(1.1) drop-shadow(0 0 15px rgba(255,140,190,0.15))" : "none",
+              transition: "filter 0.4s ease",
             }}
           />
         ) : (
@@ -176,19 +192,21 @@ export default function MemberCard({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "rgba(255,255,255,0.04)",
+              background: hovered ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)",
               borderRadius: "0.5rem 0.5rem 0 0",
+              transition: "background 0.4s ease",
             }}
           >
             <svg
               width={s.iconSize}
               height={s.iconSize}
               viewBox="0 0 24 24"
-              fill="rgba(255,255,255,0.15)"
-              stroke="rgba(255,255,255,0.2)"
+              fill={hovered ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.15)"}
+              stroke={hovered ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.2)"}
               strokeWidth="0.8"
               strokeLinecap="round"
               strokeLinejoin="round"
+              style={{ transition: "all 0.4s ease" }}
             >
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="5" />
