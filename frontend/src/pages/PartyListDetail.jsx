@@ -1,4 +1,5 @@
 import React, { useState, Suspense, lazy } from "react";
+import { createPortal } from "react-dom";
 import { Link, useParams } from "react-router-dom";
 import MemberCardRow from "../components/partylist/MemberCardRow";
 import Footer from "../components/Footer";
@@ -343,7 +344,7 @@ function ActionButton({ text, onClick }) {
 function ImageModal({ src, alt, isOpen, onClose }) {
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
@@ -412,7 +413,8 @@ function ImageModal({ src, alt, isOpen, onClose }) {
           animation: "imgZoom 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       />
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -441,7 +443,7 @@ function CarouselModal({ images, isOpen, onClose }) {
   const next = (e) => { e.stopPropagation(); setCurrent((current + 1) % images.length); };
   const prev = (e) => { e.stopPropagation(); setCurrent((current - 1 + images.length) % images.length); };
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
@@ -594,7 +596,8 @@ function CarouselModal({ images, isOpen, onClose }) {
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
         </button>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -768,7 +771,7 @@ export default function PartyListDetail() {
       />
 
       {/* Popup Overlay */}
-      {popupData && (
+      {popupData && createPortal(
         <div
           className="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-8"
           onClick={() => setPopupData(null)}
@@ -818,7 +821,8 @@ export default function PartyListDetail() {
                to { opacity: 1; transform: scale(1) translateY(0); }
             }
           `}</style>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
