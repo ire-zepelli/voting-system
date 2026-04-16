@@ -34,7 +34,7 @@ Example preview-domain regex:
 ```env
 FRONTEND_URL_REGEX=^https://.*your-frontend-project.*\.vercel\.app$
 ```
-
+//
 ## Environment Variables
 Use either `DATABASE_URL` or the individual `DB_*` values.
 
