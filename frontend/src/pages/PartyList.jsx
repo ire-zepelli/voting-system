@@ -144,6 +144,7 @@ function CarouselSlide({ party, active, onClick }) {
           <img
             src={party.image}
             alt={`${party.label} partylist`}
+            loading="lazy"
             style={{
               height: hovered
                 ? `${115 * (party.imageScale ?? 1)}%`

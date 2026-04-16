@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, Suspense, lazy } from "react";
 import { Link, useParams } from "react-router-dom";
 import MemberCardRow from "../components/partylist/MemberCardRow";
 import Footer from "../components/Footer";
-import PosterCard from "../components/Candidate-Poster/PosterCard";
+const PosterCard = lazy(() => import("../components/Candidate-Poster/PosterCard"));
 import { BEATScandidates, PEAKcandidates } from "../components/Candidate-Poster/CandidateInfo";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -795,13 +795,15 @@ export default function PartyListDetail() {
             {/* Styling Wrapper for PosterCard */}
             <div className="w-full h-full rounded-[2.5rem] overflow-hidden p-[2px] bg-gradient-to-br from-[#ff9500]/40 via-[#d13a8b]/30 to-[#3B0B2E]/50 shadow-[0_30px_70px_rgba(0,0,0,0.7)] flex">
               <div className="w-full h-full rounded-[2.4rem] overflow-hidden bg-[#2c0620] flex">
-                <PosterCard
-                  className="w-full h-full m-0 !rounded-none !shadow-none !bg-transparent overflow-y-auto overflow-x-hidden"
-                  name={popupData.name}
-                  description={popupData.description}
-                  pdfLink={popupData.pdfLink}
-                  image={popupData.poster || popupData.photo}
-                />
+                <Suspense fallback={<div style={{ margin: "auto", color: "rgba(255,255,255,0.7)", fontFamily: "Inter", fontSize: "1.2rem" }}>Loading candidate details...</div>}>
+                  <PosterCard
+                    className="w-full h-full m-0 !rounded-none !shadow-none !bg-transparent overflow-y-auto overflow-x-hidden"
+                    name={popupData.name}
+                    description={popupData.description}
+                    pdfLink={popupData.pdfLink}
+                    image={popupData.poster || popupData.photo}
+                  />
+                </Suspense>
               </div>
             </div>
           </div>
