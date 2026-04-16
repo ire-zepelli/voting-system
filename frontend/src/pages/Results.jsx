@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 import Header from "../components/Header";
 import ResultsCard from "../components/ResultsCard";
 import Footer from "../components/Footer";
@@ -45,10 +46,40 @@ const FadeInOnScroll = ({ children }) => {
 
 function Results() {
     const navigate = useNavigate();
+    const { user } = useAuth();
+
     const { data, isLoading, error, refetch } = useQuery({
         queryKey: ["results"],
         queryFn: () => apiRequest("/api/results"),
+        enabled: !!user?.hasVoted,
     });
+
+    if (!user?.hasVoted) {
+        return (
+            <div className="flex flex-col min-h-screen bg-[#3B0B2E]/98 text-white">
+                <Header />
+                <main className="flex-1 flex items-center justify-center px-6 text-center">
+                    <div className="max-w-xl">
+                        <div className="flex justify-center mb-6">
+                            <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-red-500">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4 text-[#FFA700]">Access Restricted</h1>
+                        <p className="text-white/75 leading-relaxed mb-8">
+                            You must securely cast your ballot before you are allowed to view the live election results.
+                        </p>
+                        <div className="max-w-xs mx-auto">
+                            <Button onClick={() => navigate("/voting")}>Proceed to Voting</Button>
+                        </div>
+                    </div>
+                </main>
+                <Footer />
+            </div>
+        );
+    }
 
     if (isLoading) {
         return (
