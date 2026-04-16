@@ -15,10 +15,6 @@ async function hashPassword(password) {
   return bcrypt.hash(password, 10);
 }
 
-async function verifyPassword(password, passwordHash) {
-  return bcrypt.compare(password, passwordHash);
-}
-
 function createToken(voter) {
   return jwt.sign(
     {
@@ -38,5 +34,4 @@ module.exports = {
   createToken,
   decodeToken,
   hashPassword,
-  verifyPassword,
 };
