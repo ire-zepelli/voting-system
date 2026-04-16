@@ -6,15 +6,14 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const isHome = location.pathname === "/";
   const navLinkClass =
     "text-[17px] font-normal mt-1 hover:text-[#FFA700] transition-all duration-300 pb-1 relative after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-[#FFA700] hover:after:w-full after:bottom-0 after:left-0 after:transition-all after:duration-300";
 
   function handleLogout() {
-    logout();
     setMenuOpen(false);
-    navigate("/");
+    navigate("/logout");
   }
 
   return (
