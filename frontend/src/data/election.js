@@ -18,7 +18,7 @@ export const POSITION_TITLES = {
   "Vice-President Internal": "VP-INTERNAL",
   "Vice-President External": "VP-EXTERNAL",
   Secretary: "SECRETARY",
-  "Public Information Officer": "PIO",
+  "Public Information Officer": "PUBLIC INFORMATION \nOFFICER",
   Treasurer: "TREASURER",
   "Chief of Creatives": "CHIEF OF\nCREATIVES",
   Auditor: "AUDITOR",
@@ -55,28 +55,76 @@ export const PARTY_MEMBER_SECTIONS = {
     {
       title: "EXECUTIVES",
       members: [
-        { name: "May Lapeña", position: "Secretary", photo: "/BEATS/TRANSPARENT_INDIV/LAPENA_SECRETARY.png" },
-        { name: "Dan Pierre Pogoy", position: "Vice-President Internal", photo: "/BEATS/TRANSPARENT_INDIV/POGOY_VP_INTERNAL.png" },
-        { name: "Crista Monica Oscar", position: "President", photo: "/BEATS/TRANSPARENT_INDIV/OSCAR_PRES.png" },
-        { name: "Ryan Pacumio", position: "Vice-President External", photo: "/BEATS/TRANSPARENT_INDIV/PACUMIO_VP_EXTERNAL.png" },
-        { name: "Keith Ramises Latonio", position: "Treasurer", photo: "/BEATS/TRANSPARENT_INDIV/LATONIO_TREASURER.png" },
+        {
+          name: "May Lapeña",
+          position: "Secretary",
+          photo: "/BEATS/TRANSPARENT_INDIV/LAPENA_SECRETARY.png",
+        },
+        {
+          name: "Dan Pierre Pogoy",
+          position: "Vice-President Internal",
+          photo: "/BEATS/TRANSPARENT_INDIV/POGOY_VP_INTERNAL.png",
+        },
+        {
+          name: "Crista Monica Oscar",
+          position: "President",
+          photo: "/BEATS/TRANSPARENT_INDIV/OSCAR_PRES.png",
+        },
+        {
+          name: "Ryan Pacumio",
+          position: "Vice-President External",
+          photo: "/BEATS/TRANSPARENT_INDIV/PACUMIO_VP_EXTERNAL.png",
+        },
+        {
+          name: "Keith Ramises Latonio",
+          position: "Treasurer",
+          photo: "/BEATS/TRANSPARENT_INDIV/LATONIO_TREASURER.png",
+        },
       ],
     },
     {
       title: "CHIEFS",
       members: [
-        { name: "Fiona Monilar", position: "Public Information Officer", photo: "/BEATS/TRANSPARENT_INDIV/MONILAR_PIO.png" },
-        { name: "Jhoviegen Cuysona", position: "Chief of Representative", photo: "/BEATS/TRANSPARENT_INDIV/CUYSONA_CHIEF_OF_REP.png" },
-        { name: "Harry Conde", position: "Chief of Creatives", photo: "/BEATS/TRANSPARENT_INDIV/CONDE_CHIEF_OF_CREATIVES.png" },
-        { name: "Emmanuel Franz Apawan", position: "Auditor", photo: "/BEATS/TRANSPARENT_INDIV/APAWAN_AUDITOR.png" },
-        { name: "Aimee Gayle Cogal", position: "Chief of Students Development", photo: "/BEATS/TRANSPARENT_INDIV/COGAL_CHIEF_OF_STUDENTDEV.png" },
+        {
+          name: "Fiona Monilar",
+          position: "Public Information Officer",
+          photo: "/BEATS/TRANSPARENT_INDIV/MONILAR_PIO.png",
+        },
+        {
+          name: "Jhoviegen Cuysona",
+          position: "Chief of Representative",
+          photo: "/BEATS/TRANSPARENT_INDIV/CUYSONA_CHIEF_OF_REP.png",
+        },
+        {
+          name: "Harry Conde",
+          position: "Chief of Creatives",
+          photo: "/BEATS/TRANSPARENT_INDIV/CONDE_CHIEF_OF_CREATIVES.png",
+        },
+        {
+          name: "Emmanuel Franz Apawan",
+          position: "Auditor",
+          photo: "/BEATS/TRANSPARENT_INDIV/APAWAN_AUDITOR.png",
+        },
+        {
+          name: "Aimee Gayle Cogal",
+          position: "Chief of Students Development",
+          photo: "/BEATS/TRANSPARENT_INDIV/COGAL_CHIEF_OF_STUDENTDEV.png",
+        },
       ],
     },
     {
       title: "REPRESENTATIVES",
       members: [
-        { name: "Rose Anne Resureccion", position: "Academic Representative", photo: "/BEATS/TRANSPARENT_INDIV/RESURRECCION_ACADEMIC_REP.png" },
-        { name: "Mary Grace Patalinghug", position: "CARES Representative", photo: "/BEATS/TRANSPARENT_INDIV/PATALINGHUG_CARE_REP.png" },
+        {
+          name: "Rose Anne Resureccion",
+          position: "Academic Representative",
+          photo: "/BEATS/TRANSPARENT_INDIV/RESURRECCION_ACADEMIC_REP.png",
+        },
+        {
+          name: "Mary Grace Patalinghug",
+          position: "CARES Representative",
+          photo: "/BEATS/TRANSPARENT_INDIV/PATALINGHUG_CARE_REP.png",
+        },
       ],
     },
   ],
@@ -84,27 +132,76 @@ export const PARTY_MEMBER_SECTIONS = {
     {
       title: "EXECUTIVES",
       members: [
-        { name: "Diane Mendoza", position: "Secretary", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/SECRETARY - MENDOZA_.png" },
-        { name: "Altheia Dano", position: "Vice-President Internal", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP INTERNAL- DANO.png" },
-        { name: "Darren Villanueva", position: "President", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/PRES- VILLANUEVA_.png" },
-        { name: "Kane Huxley Book", position: "Vice-President External", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP EXTERNAL - BOOK.png" },
-        { name: "Hanny Jane Enriquez", position: "Treasurer", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/TREASURER - ENRIQUEZ_.png" },
+        {
+          name: "Diane Mendoza",
+          position: "Secretary",
+          photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/SECRETARY - MENDOZA_.png",
+        },
+        {
+          name: "Altheia Dano",
+          position: "Vice-President Internal",
+          photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP INTERNAL- DANO.png",
+        },
+        {
+          name: "Darren Villanueva",
+          position: "President",
+          photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/PRES- VILLANUEVA_.png",
+        },
+        {
+          name: "Kane Huxley Book",
+          position: "Vice-President External",
+          photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/VP EXTERNAL - BOOK.png",
+        },
+        {
+          name: "Hanny Jane Enriquez",
+          position: "Treasurer",
+          photo:
+            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/TREASURER - ENRIQUEZ_.png",
+        },
       ],
     },
     {
       title: "CHIEFS",
       members: [
-        { name: "Jea Mary Trixy Magalland", position: "Public Information Officer", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/P.I OFFICER- MAGALLANO.png" },
-        { name: "Abijah Shen Regado", position: "Chief of Representative", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/REPRESENTATIVE - REGADO.png" },
-        { name: "Tristhan Mark Vincent Villamor", position: "Chief of Creatives", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CREATIVES - VILLAMOR_.png" },
-        { name: "Myka Angela Dumael", position: "Auditor", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/AUDIT- DUMAEL.png" },
-        { name: "Jeoff Andrew Demecillo", position: "Chief of Students Development", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/DEVELOPMENT - DEMECILLO.png" },
+        {
+          name: "Jea Mary Trixy Magalland",
+          position: "Public Information Officer",
+          photo:
+            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/P.I OFFICER- MAGALLANO.png",
+        },
+        {
+          name: "Abijah Shen Regado",
+          position: "Chief of Representative",
+          photo:
+            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/REPRESENTATIVE - REGADO.png",
+        },
+        {
+          name: "Tristhan Mark Vincent Villamor",
+          position: "Chief of Creatives",
+          photo:
+            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CREATIVES - VILLAMOR_.png",
+        },
+        {
+          name: "Myka Angela Dumael",
+          position: "Auditor",
+          photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/AUDIT- DUMAEL.png",
+        },
+        {
+          name: "Jeoff Andrew Demecillo",
+          position: "Chief of Students Development",
+          photo:
+            "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/DEVELOPMENT - DEMECILLO.png",
+        },
       ],
     },
     {
       title: "REPRESENTATIVES",
       members: [
-        { name: "Nathaniel Ornopia", position: "CARES Representative", photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CARES REP- ORNOPIA.png" },
+        {
+          name: "Nathaniel Ornopia",
+          position: "CARES Representative",
+          photo: "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/CARES REP- ORNOPIA.png",
+        },
       ],
     },
   ],
@@ -136,7 +233,7 @@ function splitCandidateName(name) {
 export function groupCandidatesByPosition(candidates) {
   return POSITION_ORDER.map((position) => {
     const matchingCandidates = candidates.filter(
-      (candidate) => candidate.position === position
+      (candidate) => candidate.position === position,
     );
 
     if (!matchingCandidates.length) {
