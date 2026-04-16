@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Voting from "./pages/Voting";
 const PartyList = lazy(() => import("./pages/PartyList").then(m => ({ default: m.PartyList })));
@@ -12,6 +12,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 
 function App() {
+  const location = useLocation();
+
   return (
     <>
       <Suspense fallback={
@@ -19,25 +21,27 @@ function App() {
           <div style={{ color: '#fff', fontFamily: 'Inter' }}>Loading...</div>
         </div>
       }>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/partylist" element={<PartyList />} />
-          <Route path="/partylist/:id" element={<PartyListDetail />} />
-          <Route
-            path="/voting"
-            element={
-              <ProtectedRoute>
-                <Voting />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/results" element={<Results />} />
+        <div key={location.pathname} className="page-transition min-h-screen">
+          <Routes location={location}>
+            <Route path="/" element={<Landing />} />
+            <Route path="/partylist" element={<PartyList />} />
+            <Route path="/partylist/:id" element={<PartyListDetail />} />
+            <Route
+              path="/voting"
+              element={
+                <ProtectedRoute>
+                  <Voting />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/results" element={<Results />} />
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login/not-signed-in" element={<Login />} />
-          <Route path="/login/timerexpired" element={<Login />} />
-        </Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login/not-signed-in" element={<Login />} />
+            <Route path="/login/timerexpired" element={<Login />} />
+          </Routes>
+        </div>
       </Suspense>
     </>
   );
