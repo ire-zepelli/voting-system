@@ -612,19 +612,32 @@ export default function PartyListDetail() {
   const [isOrgModalOpen, setIsOrgModalOpen] = React.useState(false);
   const [isPlatformModalOpen, setIsPlatformModalOpen] = React.useState(false);
 
-  // Handle Escape key for modals
+  const [popupData, setPopupData] = useState(null);
+
+  // Handle Escape key for modals and popups
   React.useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
         setIsOrgModalOpen(false);
         setIsPlatformModalOpen(false);
+        setPopupData(null);
       }
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  const [popupData, setPopupData] = useState(null);
+  // Prevent background scrolling when a modal or popup is open
+  React.useEffect(() => {
+    if (popupData || isOrgModalOpen || isPlatformModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [popupData, isOrgModalOpen, isPlatformModalOpen]);
 
   const handleMemberClick = (member) => {
     const candidates = partyId === "beats" ? BEATScandidates : PEAKcandidates;
@@ -800,7 +813,7 @@ export default function PartyListDetail() {
               <div className="w-full h-full rounded-[2.4rem] overflow-hidden bg-[#2c0620] flex">
                 <Suspense fallback={<div style={{ margin: "auto", color: "rgba(255,255,255,0.7)", fontFamily: "Inter", fontSize: "1.2rem" }}>Loading candidate details...</div>}>
                   <PosterCard
-                    className="w-full h-full m-0 !rounded-none !shadow-none !bg-transparent overflow-y-auto overflow-x-hidden"
+                    className="w-full h-full m-0 !rounded-none !shadow-none !bg-transparent overflow-y-auto overflow-x-hidden custom-scrollbar"
                     name={popupData.name}
                     description={popupData.description}
                     pdfLink={popupData.pdfLink}
