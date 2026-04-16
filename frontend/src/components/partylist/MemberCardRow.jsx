@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MemberCard from "./MemberCard";
 
 /**
@@ -22,14 +22,26 @@ export default function MemberCardRow({
   rowHeight = "420px",
   initialFacing = "right", // "right" or "left"
 }) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <div style={{
       display: "flex",
-      alignItems: "flex-end",
+      flexWrap: "wrap",
+      alignItems: isMobile ? "flex-start" : "flex-end",
       justifyContent: "center",
-      gap: "1.5rem",
+      gap: isMobile ? "1rem" : "1.5rem",
       width: "100%",
-      height: rowHeight,
+      height: isMobile ? "auto" : rowHeight,
+      minHeight: isMobile ? rowHeight : "0",
+      padding: isMobile ? "1rem 0" : 0,
     }}>
       {members.slice(0, 5).map((member, i) => {
         const centerIndex = Math.floor(members.length / 2);
@@ -40,10 +52,11 @@ export default function MemberCardRow({
 
         return (
           <div key={i} style={{
-            flex: "1 1 0",
-            maxWidth: "20%",
-            height: "88%",
+            flex: isMobile ? "0 1 150px" : "1 1 0",
+            maxWidth: isMobile ? "45%" : "20%",
+            height: isMobile ? "300px" : "88%",
             minWidth: 0,
+            marginBottom: isMobile ? "1rem" : 0,
           }}>
             <MemberCard
               member={member}

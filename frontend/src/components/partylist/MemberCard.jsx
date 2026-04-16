@@ -29,6 +29,15 @@ export default function MemberCard({
   flipX = false,
 }) {
   const [hovered, setHovered] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const s = SIZES[size] ?? SIZES.md;
   const clickable = typeof onSelect === "function";
 
@@ -83,7 +92,7 @@ export default function MemberCard({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-end",
-          paddingBottom: "1.6rem",
+          paddingBottom: "1.2rem",
           transition: "all 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
           overflow: "visible",
         }}
@@ -128,7 +137,7 @@ export default function MemberCard({
           bottom: 0,
           left: 0,
           right: 0,
-          paddingBottom: "1.6rem",
+          paddingBottom: "1rem",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -144,11 +153,12 @@ export default function MemberCard({
               fontFamily: "Inter, sans-serif",
               display: "block",
               color: hovered ? "#fff" : "rgba(255,255,255,0.95)",
-              fontSize: s.fontSize,
-              fontWeight: 600,
+              fontSize: isMobile ? "0.78rem" : s.fontSize,
+              fontWeight: 700,
               letterSpacing: "0.08em",
               lineHeight: 1.3,
               transition: "color 0.3s ease",
+              textShadow: "none",
             }}
           >
             {member.position}
@@ -158,9 +168,9 @@ export default function MemberCard({
               style={{
                 display: "block",
                 color: hovered ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.5)",
-                fontSize: s.nameFontSize,
+                fontSize: isMobile ? "0.7rem" : s.nameFontSize,
                 fontWeight: 400,
-                marginTop: "0.45rem",
+                marginTop: isMobile ? "0.2rem" : "0.45rem",
                 lineHeight: 1.2,
                 transition: "color 0.3s ease",
               }}
@@ -179,7 +189,7 @@ export default function MemberCard({
           left: "50%",
           transform: `translateX(-50%) scale(${flipX ? -1 : 1}, 1) scale(${hovered ? 1.08 : 1})`,
           width: size === "lg" ? "92%" : size === "sm" ? "78%" : "88%",
-          height: "82%", // Pulled down slightly so only the head overlaps the title text
+          height: isMobile ? "70%" : "82%", // Reduced height on mobile to clear the labels
           zIndex: 2,
           display: "flex",
           alignItems: "flex-end",

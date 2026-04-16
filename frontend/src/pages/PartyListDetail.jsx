@@ -1,5 +1,4 @@
-import React, { useState, Suspense, lazy } from "react";
-import { createPortal } from "react-dom";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import MemberCardRow from "../components/partylist/MemberCardRow";
 import Footer from "../components/Footer";
@@ -95,7 +94,7 @@ const PARTY_DATA = {
 };
 
 // ─── One full-viewport section ────────────────────────────────────────────────
-function Section({ section, isLast, initialFacing, onMemberClick }) {
+function Section({ section, isLast, initialFacing, onMemberClick, isMobile }) {
   return (
     <section
       id={section.title}
@@ -115,11 +114,11 @@ function Section({ section, isLast, initialFacing, onMemberClick }) {
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: "40%",
+          top: isMobile ? "18%" : "40%",
           left: "50%",
           transform: "translate(-50%, -50%)",
           whiteSpace: "nowrap",
-          fontSize: "clamp(7rem, 20vw, 30rem)",
+          fontSize: isMobile ? "clamp(3.5rem, 15vw, 10rem)" : "clamp(7rem, 20vw, 30rem)",
           fontWeight: "bold",
           fontFamily: "Inter, sans-serif",
           color: "rgba(255,255,255,0.05)",
@@ -137,7 +136,7 @@ function Section({ section, isLast, initialFacing, onMemberClick }) {
       <div
         style={{
           position: "absolute",
-          top: "30%",
+          top: isMobile ? "10%" : "30%",
           left: 0,
           right: 0,
           padding: "0 5vw",
@@ -150,8 +149,8 @@ function Section({ section, isLast, initialFacing, onMemberClick }) {
           style={{
             display: "block",
             fontSize: section.title === "REPRESENTATIVES"
-              ? "clamp(2rem, 8vw, 7rem)"
-              : "clamp(3.5rem, 11vw, 9.5rem)",
+              ? (isMobile ? "clamp(1.5rem, 6vw, 3rem)" : "clamp(2rem, 8vw, 7rem)")
+              : (isMobile ? "clamp(2rem, 9vw, 4.5rem)" : "clamp(3.5rem, 11vw, 9.5rem)"),
             fontWeight: "bold",
             fontFamily: "Inter, sans-serif",
             color: "#ffffff",
@@ -163,35 +162,7 @@ function Section({ section, isLast, initialFacing, onMemberClick }) {
         </span>
       </div>
 
-      {/* Foreground title */}
-      <div
-        style={{
-          position: "absolute",
-          top: "30%", // Moved up so only heads overlap, not the whole body
-          left: 0,
-          right: 0,
-          padding: "0 5vw",
-          zIndex: 1,
-          pointerEvents: "none",
-          textAlign: "center", // Align Center exactly like the picture
-        }}
-      >
-        <span
-          style={{
-            display: "block",
-            fontSize: section.title === "REPRESENTATIVES"
-              ? "clamp(2rem, 8vw, 7rem)"
-              : "clamp(3.5rem, 11vw, 9.5rem)",
-            fontWeight: "bold",
-            fontFamily: "Inter, sans-serif",
-            color: "#ffffff",
-            lineHeight: 1,
-            letterSpacing: "-0.08em", // Tighter letter spacing
-          }}
-        >
-          {section.title}
-        </span>
-      </div>
+
 
       {/* Cards row — sits in the bottom 60% of the section */}
       {/* Extra paddingTop gives photo overflow room above cards */}
@@ -201,7 +172,7 @@ function Section({ section, isLast, initialFacing, onMemberClick }) {
           zIndex: 2,
           width: "96%",
           margin: "0 auto",
-          paddingTop: "6vh",
+          paddingTop: isMobile ? "25vh" : "6vh",
           paddingBottom: "4vh",
         }}
       >
@@ -218,7 +189,7 @@ function Section({ section, isLast, initialFacing, onMemberClick }) {
 }
 
 // ─── Sticky Header ──────────────────────────────────────────────────────────────
-function StickyHeader() {
+function StickyHeader({ isMobile }) {
   return (
     <div
       style={{
@@ -226,8 +197,8 @@ function StickyHeader() {
         top: 0,
         left: 0,
         right: 0,
-        padding: "2rem",
-        zIndex: 50,
+        padding: isMobile ? "1rem" : "2rem",
+        zIndex: 200,
         pointerEvents: "none",
         display: "flex",
         justifyContent: "space-between",
@@ -258,7 +229,7 @@ function StickyHeader() {
   );
 }
 
-function RoleNavbar({ sections, onSectionClick }) {
+function RoleNavbar({ sections, onSectionClick, isMobile }) {
   const scrollTo = (id) => {
     if (onSectionClick) onSectionClick();
     const el = document.getElementById(id);
@@ -268,46 +239,61 @@ function RoleNavbar({ sections, onSectionClick }) {
   return (
     <div
       style={{
-        position: "fixed",
-        top: "6rem",
-        right: "2rem",
+        position: isMobile ? "sticky" : "fixed",
+        top: isMobile ? "3.5rem" : "6rem",
+        right: isMobile ? "0" : "2rem",
+        left: isMobile ? "0" : "auto",
         zIndex: 100,
         display: "flex",
-        flexDirection: "column",
-        gap: "0.5rem",
-        alignItems: "flex-end",
+        flexDirection: isMobile ? "row" : "column",
+        gap: isMobile ? "1.5rem" : "0.5rem",
+        alignItems: isMobile ? "center" : "flex-end",
+        justifyContent: isMobile ? "flex-start" : "flex-end",
+        padding: isMobile ? "0.75rem 1.5rem" : "0",
+        background: isMobile ? "rgba(52, 16, 42, 0.95)" : "transparent",
+        backdropFilter: isMobile ? "blur(10px)" : "none",
+        borderBottom: isMobile ? "1px solid rgba(255,255,255,0.1)" : "none",
+        overflowX: isMobile ? "auto" : "visible",
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
       }}
     >
       {sections.map((sec) => (
-        <button
-          key={sec.title}
-          onClick={() => scrollTo(sec.title)}
-          style={{
-            background: "transparent",
-            border: "none",
-            color: "rgba(255,255,255,0.6)",
-            fontSize: "0.85rem",
-            fontWeight: 500,
-            textTransform: "uppercase",
-            letterSpacing: "0.1em",
-            cursor: "pointer",
-            padding: "0.25rem 0",
-            transition: "all 0.3s ease",
-            fontFamily: "Inter, sans-serif",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.color = "#fff";
-            e.target.style.transform = "translateX(-8px)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.color = "rgba(255,255,255,0.6)";
-            e.target.style.transform = "translateX(0)";
-          }}
-        >
-          {sec.title}
-        </button>
-      ))}
-    </div>
+          <button
+            key={sec.title}
+            onClick={() => scrollTo(sec.title)}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "rgba(255,255,255,0.6)",
+              fontSize: isMobile ? "0.75rem" : "0.85rem",
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              cursor: "pointer",
+              padding: isMobile ? "0.5rem 0" : "0.25rem 0",
+              transition: "all 0.3s ease",
+              fontFamily: "Inter, sans-serif",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.target.style.color = "#fff";
+                e.target.style.transform = "translateX(-8px)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.target.style.color = "rgba(255,255,255,0.6)";
+                e.target.style.transform = "translateX(0)";
+              }
+            }}
+          >
+            {sec.title}
+          </button>
+        ))}
+        {isMobile && <style>{`div::-webkit-scrollbar { display: none; }`}</style>}
+      </div>
   );
 }
 
@@ -611,6 +597,14 @@ export default function PartyListDetail() {
   const [titleHovered, setTitleHovered] = React.useState(false);
   const [isOrgModalOpen, setIsOrgModalOpen] = React.useState(false);
   const [isPlatformModalOpen, setIsPlatformModalOpen] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const [popupData, setPopupData] = useState(null);
 
@@ -664,13 +658,14 @@ export default function PartyListDetail() {
         position: "relative",
       }}
     >
-      <StickyHeader />
+      <StickyHeader isMobile={isMobile} />
       <RoleNavbar
         sections={sections}
         onSectionClick={() => {
           setIsOrgModalOpen(false);
           setIsPlatformModalOpen(false);
         }}
+        isMobile={isMobile}
       />
 
       {/* Team Header Section */}
@@ -696,7 +691,7 @@ export default function PartyListDetail() {
             left: "50%",
             transform: "translate(-50%, -50%)",
             whiteSpace: "nowrap",
-            fontSize: "clamp(10rem, 35vw, 45rem)",
+            fontSize: isMobile ? "clamp(4rem, 25vw, 12rem)" : "clamp(10rem, 35vw, 45rem)",
             fontWeight: 900,
             fontFamily: "Inter, sans-serif",
             color: "rgba(255,255,255,0.03)",
@@ -716,7 +711,7 @@ export default function PartyListDetail() {
           style={{
             position: "relative",
             zIndex: 1,
-            fontSize: "clamp(4rem, 15vw, 15rem)",
+            fontSize: isMobile ? "clamp(2.5rem, 12vw, 6rem)" : "clamp(4rem, 15vw, 15rem)",
             fontWeight: 900,
             color: titleHovered ? "#fff" : "rgba(255,255,255,0.9)",
             textTransform: "uppercase",
@@ -737,10 +732,12 @@ export default function PartyListDetail() {
         <div
           style={{
             display: "flex",
-            gap: "1.5rem",
+            flexDirection: isMobile ? "column" : "row",
+            gap: isMobile ? "0.75rem" : "1.5rem",
             position: "relative",
             zIndex: 2,
-            transition: "all 0.5s ease"
+            transition: "all 0.5s ease",
+            width: isMobile ? "90%" : "auto"
           }}
         >
           <ActionButton
@@ -764,6 +761,7 @@ export default function PartyListDetail() {
           isLast={i === sections.length - 1}
           onMemberClick={handleMemberClick}
           initialFacing="right"
+          isMobile={isMobile}
         />
       ))}
 
