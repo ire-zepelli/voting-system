@@ -632,10 +632,10 @@ export default function PartyListDetail() {
     if (popupData || isOrgModalOpen || isPlatformModalOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     };
   }, [popupData, isOrgModalOpen, isPlatformModalOpen]);
 
@@ -697,11 +697,11 @@ export default function PartyListDetail() {
             transform: "translate(-50%, -50%)",
             whiteSpace: "nowrap",
             fontSize: "clamp(10rem, 35vw, 45rem)",
-            fontWeight: 900,
+            fontWeight: 700,
             fontFamily: "Inter, sans-serif",
             color: "rgba(255,255,255,0.03)",
             lineHeight: 1,
-            letterSpacing: "-0.05em",
+            letterSpacing: "-0.03em",
             userSelect: "none",
             pointerEvents: "none",
             zIndex: 0,
@@ -717,10 +717,10 @@ export default function PartyListDetail() {
             position: "relative",
             zIndex: 1,
             fontSize: "clamp(4rem, 15vw, 15rem)",
-            fontWeight: 900,
+            fontWeight: 700,
             color: titleHovered ? "#fff" : "rgba(255,255,255,0.9)",
             textTransform: "uppercase",
-            letterSpacing: "-0.05em",
+            letterSpacing: "-0.03em",
             margin: "0 0 2rem 0", // Give the h1 some space
             fontFamily: "Inter, sans-serif",
             transition: "all 0.5s cubic-bezier(0.25, 1, 0.5, 1)",
@@ -802,7 +802,7 @@ export default function PartyListDetail() {
             {/* Elegant Close Button */}
             <button
               onClick={() => setPopupData(null)}
-              className="absolute -top-5 -right-5 z-50 text-white bg-[#3B0B2E] border-[3px] border-[#ff9500]/70 hover:border-[#ff9500] hover:bg-[#582449] hover:scale-110 hover:rotate-90 rounded-full w-[3.25rem] h-[3.25rem] flex items-center justify-center text-2xl font-bold transition-all duration-300 shadow-[0_0_20px_rgba(255,149,0,0.4)]"
+              className="absolute -top-5 -right-5 z-50 text-white bg-[#3B0B2E] border-[3px] border-[#ff9500]/70 hover:border-[#ff9500] hover:bg-[#582449] hover:scale-110 hover:rotate-90 rounded-full w-[3.25rem] h-[3.25rem] flex items-center justify-center text-2xl font-bold transition-all duration-300 shadow-[0_0_20px_rgba(255,149,0,0.4)] cursor-pointer"
               title="Close"
             >
               ✕

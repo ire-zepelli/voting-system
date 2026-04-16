@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import MemberCard from "./MemberCard";
 
 /**
@@ -22,15 +22,24 @@ export default function MemberCardRow({
   rowHeight = "420px",
   initialFacing = "right", // "right" or "left"
 }) {
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    // When elements mount on a narrow (mobile) viewport, scroll to the center card (index 2)
+    if (scrollRef.current && members.length > 2) {
+      setTimeout(() => {
+        if (window.innerWidth < 640 && scrollRef.current.children[2]) {
+          scrollRef.current.children[2].scrollIntoView({ inline: "center", behavior: "smooth", block: "nearest" });
+        }
+      }, 100);
+    }
+  }, [members.length]);
+
   return (
-    <div style={{
-      display: "flex",
-      alignItems: "flex-end",
-      justifyContent: "center",
-      gap: "1.5rem",
-      width: "100%",
-      height: rowHeight,
-    }}>
+    <div 
+      ref={scrollRef}
+      className="w-full flex items-end justify-start sm:justify-center gap-4 sm:gap-6 pb-6 pt-4 px-6 sm:px-0 overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory scroll-smooth hide-scrollbar"
+         style={{ height: rowHeight }}>
       {members.slice(0, 5).map((member, i) => {
         const centerIndex = Math.floor(members.length / 2);
         // Manual override takes precedence, otherwise use positional logic
@@ -39,12 +48,7 @@ export default function MemberCardRow({
           : (initialFacing === "right" ? i > centerIndex : i < centerIndex);
 
         return (
-          <div key={i} style={{
-            flex: "1 1 0",
-            maxWidth: "20%",
-            height: "88%",
-            minWidth: 0,
-          }}>
+          <div key={i} className="flex-none sm:flex-1 snap-center w-[75vw] sm:w-auto sm:max-w-[20%] h-[88%] min-w-0 relative">
             <MemberCard
               member={member}
               size="md"

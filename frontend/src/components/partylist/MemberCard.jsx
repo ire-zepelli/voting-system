@@ -162,6 +162,9 @@ export default function MemberCard({
                 fontWeight: 400,
                 marginTop: "0.45rem",
                 lineHeight: 1.2,
+                letterSpacing: "normal",
+                whiteSpace: "normal",
+                wordBreak: "break-word",
                 transition: "color 0.3s ease",
               }}
             >
@@ -179,7 +182,7 @@ export default function MemberCard({
           left: "50%",
           transform: `translateX(-50%) scale(${flipX ? -1 : 1}, 1) scale(${hovered ? 1.08 : 1})`,
           width: size === "lg" ? "92%" : size === "sm" ? "78%" : "88%",
-          height: "82%", // Pulled down slightly so only the head overlaps the title text
+          height: "72%", // Pulled down slightly so only the head overlaps the title text, stopping before the text labels
           zIndex: 2,
           display: "flex",
           alignItems: "flex-end",

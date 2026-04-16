@@ -1,11 +1,11 @@
 const { Pool } = require("pg");
 
-const databaseUrl = process.env.DATABASE_URL;
-const databaseHost = process.env.DB_HOST;
+const databaseUrl = "postgresql://postgres.ifabxduzqquvfbqqespt:Gardo%40547603@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres";
+const databaseHost = "aws-1-ap-southeast-1.pooler.supabase.com";
 const databasePort = Number(process.env.DB_PORT || 5432);
-const databaseName = process.env.DB_NAME;
-const databaseUser = process.env.DB_USER;
-const databasePassword = process.env.DB_PASSWORD;
+const databaseName = "postgres";
+const databaseUser = "postgres.ifabxduzqquvfbqqespt";
+const databasePassword = "Gardo@547603";
 const missingConfigMessage =
   "Database config is missing. Set DATABASE_URL or DB_HOST, DB_PORT, DB_NAME, DB_USER, and DB_PASSWORD.";
 

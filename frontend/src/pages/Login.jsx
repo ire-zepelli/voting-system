@@ -14,7 +14,6 @@ export default function Login() {
   const { isAuthenticated, isLoading, login } = useAuth();
   const [formData, setFormData] = useState({
     studentId: "",
-    password: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,7 +45,6 @@ export default function Login() {
     try {
       await login({
         studentId: formData.studentId,
-        password: formData.password,
       });
 
       navigate("/", { replace: true });
@@ -83,15 +81,6 @@ export default function Login() {
                   placeholder="Enter your 8-digit student ID"
                   autoComplete="off"
                 />
-                <Input
-                  label="Password"
-                  id="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  autoComplete="off"
-                />
 
                 <p className="text-xs text-white/65 mb-6 mt-1">
                   Your session stays active on this browser until you log out.
@@ -105,17 +94,10 @@ export default function Login() {
 
                 <Button
                   type="submit"
-                  disabled={isSubmitting || formData.studentId.length !== 8 || !formData.password}
+                  disabled={isSubmitting || formData.studentId.length !== 8}
                 >
                   {isSubmitting ? "Signing In..." : "Login"}
                 </Button>
-                
-                <div className="mt-8 text-center text-sm text-white/80">
-                  Don't have an account?{' '}
-                  <Link to="/register" className="text-[#FFA700] hover:text-[#E58000] hover:underline transition-colors font-medium">
-                    Register
-                  </Link>
-                </div>
               </form>
             </>
           )}
