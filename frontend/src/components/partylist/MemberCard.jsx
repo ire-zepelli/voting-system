@@ -192,6 +192,7 @@ export default function MemberCard({
           <img
             src={member.photo}
             alt={member.position}
+            loading="lazy"
             style={{
               width: "100%",
               height: "100%",
