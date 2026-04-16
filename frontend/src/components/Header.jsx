@@ -56,12 +56,14 @@ function Header() {
             >
               Voting
             </Link>
-            <Link
-              to="/results"
-              className={navLinkClass}
-            >
-              Results
-            </Link>
+            {user?.hasVoted && (
+              <Link
+                to="/results"
+                className={navLinkClass}
+              >
+                Results
+              </Link>
+            )}
           </>
         )}
 
@@ -151,13 +153,15 @@ function Header() {
             >
               Voting
             </Link>
-            <Link
-              to="/results"
-              onClick={() => setMenuOpen(false)}
-              className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
-            >
-              Results
-            </Link>
+            {user?.hasVoted && (
+              <Link
+                to="/results"
+                onClick={() => setMenuOpen(false)}
+                className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
+              >
+                Results
+              </Link>
+            )}
           </>
         )}
 
