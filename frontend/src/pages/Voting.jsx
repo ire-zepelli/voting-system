@@ -101,7 +101,10 @@ function SkipConfirmationModal({
             <p className="text-xs uppercase tracking-[0.22em] text-[#FFA700] mb-3">
               Confirmation Required
             </p>
-            <h2 id="skip-modal-title" className="text-3xl font-bold tracking-tight">
+            <h2
+              id="skip-modal-title"
+              className="text-3xl font-bold tracking-tight"
+            >
               {title}
             </h2>
           </div>
@@ -115,9 +118,7 @@ function SkipConfirmationModal({
           </button>
         </div>
 
-        <p className="mt-5 text-white/75 leading-relaxed">
-          {description}
-        </p>
+        <p className="mt-5 text-white/75 leading-relaxed">{description}</p>
 
         {!isSinglePosition && (
           <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
@@ -180,7 +181,10 @@ function ReviewVotesModal({
             <p className="text-xs uppercase tracking-[0.22em] text-[#FFA700] mb-3">
               Review Your Ballot
             </p>
-            <h2 id="review-modal-title" className="text-3xl font-bold tracking-tight">
+            <h2
+              id="review-modal-title"
+              className="text-3xl font-bold tracking-tight"
+            >
               Vote Summary
             </h2>
           </div>
@@ -199,7 +203,7 @@ function ReviewVotesModal({
             {positions.map((positionGroup) => {
               const selectedId = selectedVotes[positionGroup.position];
               const candidate = positionGroup.candidates.find(
-                (c) => c.id === selectedId
+                (c) => c.id === selectedId,
               );
 
               return (
@@ -212,13 +216,17 @@ function ReviewVotesModal({
                   </span>
                   {candidate ? (
                     <div>
-                      <div className="font-medium text-white">{candidate.name}</div>
+                      <div className="font-medium text-white">
+                        {candidate.name}
+                      </div>
                       <div className="text-[10px] sm:text-xs text-[#FFA700] uppercase tracking-wider mt-1">
                         {candidate.partylist}
                       </div>
                     </div>
                   ) : (
-                    <span className="text-white/40 italic text-sm">Left Blank</span>
+                    <span className="text-white/40 italic text-sm">
+                      Left Blank
+                    </span>
                   )}
                 </div>
               );
@@ -265,30 +273,41 @@ export default function Voting() {
     queryFn: () => apiRequest("/api/candidates"),
   });
 
+  // Auto-hide status message after 3 seconds
+  useEffect(() => {
+    if (statusMessage) {
+      const timer = setTimeout(() => {
+        setStatusMessage("");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusMessage]);
+
   const positions = groupCandidatesByPosition(data?.candidates || []);
   const currentPosition = positions[currentPositionIndex];
   const selectedCount = positions.filter(
-    (positionGroup) => selectedVotes[positionGroup.position]
+    (positionGroup) => selectedVotes[positionGroup.position],
   ).length;
   const skippedCount = positions.filter(
-    (positionGroup) => skippedPositions[positionGroup.position]
+    (positionGroup) => skippedPositions[positionGroup.position],
   ).length;
   const reviewedCount = positions.filter(
     (positionGroup) =>
-      selectedVotes[positionGroup.position] || skippedPositions[positionGroup.position]
+      selectedVotes[positionGroup.position] ||
+      skippedPositions[positionGroup.position],
   ).length;
   const unresolvedPositions = positions
     .filter(
       (positionGroup) =>
         !selectedVotes[positionGroup.position] &&
-        !skippedPositions[positionGroup.position]
+        !skippedPositions[positionGroup.position],
     )
     .map((positionGroup) => positionGroup.position);
   const isCurrentPositionSelected = Boolean(
-    currentPosition && selectedVotes[currentPosition.position]
+    currentPosition && selectedVotes[currentPosition.position],
   );
   const isCurrentPositionSkipped = Boolean(
-    currentPosition && skippedPositions[currentPosition.position]
+    currentPosition && skippedPositions[currentPosition.position],
   );
 
   const voteMutation = useMutation({
@@ -309,7 +328,8 @@ export default function Voting() {
   });
 
   const handleVote = (position, candidateId) => {
-    const nextCandidateId = selectedVotes[position] === candidateId ? null : candidateId;
+    const nextCandidateId =
+      selectedVotes[position] === candidateId ? null : candidateId;
 
     setStatusMessage("");
     setSelectedVotes((prev) => ({
@@ -364,7 +384,7 @@ export default function Voting() {
 
     if (mode === "next") {
       setStatusMessage(
-        `${positionsToSkip[0]} will be left blank. You can still go back and choose a candidate before final submission.`
+        `${positionsToSkip[0]} will be left blank. You can still go back and choose a candidate before final submission.`,
       );
 
       if (currentPositionIndex < positions.length - 1) {
@@ -417,8 +437,9 @@ export default function Voting() {
   };
 
   const handleFinalSubmit = () => {
-    setStatusMessage("");
-    voteMutation.mutate(buildCandidateIds());
+    //setStatusMessage("");
+    //voteMutation.mutate(buildCandidateIds());
+    console.log(voteMutation.mutate(buildCandidateIds()));
   };
 
   if (user?.hasVoted) {
@@ -447,7 +468,9 @@ export default function Voting() {
         title="Unable To Load Ballot"
         message={error.message}
         actionLabel="Try Again"
-        onAction={() => queryClient.invalidateQueries({ queryKey: ["candidates"] })}
+        onAction={() =>
+          queryClient.invalidateQueries({ queryKey: ["candidates"] })
+        }
       />
     );
   }
@@ -464,20 +487,20 @@ export default function Voting() {
   return (
     <div className="flex flex-col">
       <Header />
-      <div className="flex gap-1 items-center justify-start ml-18">
+      <div className="flex gap-1 items-center justify-start ml-4 sm:ml-8 md:ml-14 lg:ml-18">
         <img
           src={uclmccs}
           alt="UCLM CCS Logo"
-          className="w-[45px] h-auto object-contain"
+          className="w-[30px] sm:w-[38px] md:w-[45px] h-auto object-contain"
         />
         <img
           src={uclmpsits}
           alt="UCLM PSITS Logo"
-          className="w-[45px] h-auto object-contain"
+          className="w-[30px] sm:w-[38px] md:w-[45px] h-auto object-contain"
         />
       </div>
-      <div className="flex flex-col min-h-[50vh]">
-        <div className="px-6 md:px-14 pt-4 text-white/80 text-sm tracking-wide flex justify-between gap-4">
+      <div className="flex flex-col">
+        <div className="px-4 sm:px-6 md:px-14 pt-2 text-white/80 text-[10px] sm:text-xs tracking-wide flex flex-col sm:flex-row justify-between gap-1 sm:gap-4">
           <span>
             Ballot progress: {reviewedCount} / {positions.length} reviewed
           </span>
@@ -486,23 +509,11 @@ export default function Voting() {
           </span>
         </div>
 
-        <div className="px-6 md:px-14 pt-2 text-white/60 text-sm tracking-wide flex justify-end">
+        <div className="px-4 sm:px-6 md:px-14 pt-1 text-white/60 text-[10px] sm:text-xs tracking-wide flex justify-end">
           <span>
             {currentPositionIndex + 1} of {positions.length}
           </span>
         </div>
-
-        {statusMessage && (
-          <div className="mx-6 md:mx-14 mt-4 rounded-xl border border-[#FFA700]/30 bg-[#FFA700]/10 px-4 py-3 text-sm text-[#FFD68A]">
-            {statusMessage}
-          </div>
-        )}
-
-        {isCurrentPositionSkipped && !isCurrentPositionSelected && (
-          <div className="mx-6 md:mx-14 mt-4 rounded-xl border border-sky-300/20 bg-sky-400/10 px-4 py-3 text-sm text-sky-100">
-            {currentPosition.position} is currently left blank. You can still select a candidate before submitting your ballot.
-          </div>
-        )}
 
         <FadeInOnScroll key={currentPosition.id}>
           <CandidatesBanner
@@ -517,21 +528,33 @@ export default function Voting() {
         </FadeInOnScroll>
       </div>
 
-      <div className="flex flex-row justify-center gap-6 md:gap-12 w-full px-4 mb-2">
+      <div className="flex flex-row justify-center gap-3 sm:gap-6 md:gap-12 w-full px-4 mb-2">
         {currentPositionIndex > 0 && (
-          <div className="w-48 md:w-[250px]">
-            <Button className="w-full" onClick={handleBack} disabled={voteMutation.isPending}>
+          <div className="w-32 sm:w-40 md:w-48 lg:w-[250px]">
+            <Button
+              className="w-full text-sm sm:text-base"
+              onClick={handleBack}
+              disabled={voteMutation.isPending}
+            >
               Back
             </Button>
           </div>
         )}
-        <div className="w-48 md:w-[250px]">
+        <div className="w-32 sm:w-40 md:w-48 lg:w-[250px]">
           {currentPositionIndex < positions.length - 1 ? (
-            <Button className="w-full" onClick={handleNext} disabled={voteMutation.isPending}>
+            <Button
+              className="w-full text-sm sm:text-base"
+              onClick={handleNext}
+              disabled={voteMutation.isPending}
+            >
               Next
             </Button>
           ) : (
-            <Button className="w-full" onClick={handleSubmit} disabled={voteMutation.isPending}>
+            <Button
+              className="w-full text-sm sm:text-base"
+              onClick={handleSubmit}
+              disabled={voteMutation.isPending}
+            >
               {voteMutation.isPending ? "Submitting..." : "Submit"}
             </Button>
           )}
@@ -554,6 +577,30 @@ export default function Voting() {
           isSubmitting={voteMutation.isPending}
         />
       )}
+
+      {/* Fixed notifications container - positioned in the bottom-right corner */}
+      <div className="fixed bottom-20 right-4 md:right-6 lg:right-8 z-50 flex flex-col gap-2 max-w-[calc(100%-2rem)] md:max-w-[220px] pointer-events-none">
+        {statusMessage && (
+          <div className="rounded-xl border border-[#FFA700]/30 bg-[#2D0D25]/95 backdrop-blur-xl p-2.5 text-[10px] sm:text-[11px] text-[#FFD68A] shadow-2xl pointer-events-auto animate-in fade-in slide-in-from-right-3">
+            <div className="flex items-start gap-2">
+              <div className="mt-1 flex-shrink-0 w-1 h-1 rounded-full bg-[#FFA700] shadow-[0_0_5px_#FFA700]" />
+              <p className="leading-tight opacity-90">{statusMessage}</p>
+            </div>
+          </div>
+        )}
+
+        {isCurrentPositionSkipped && !isCurrentPositionSelected && (
+          <div className="rounded-xl border border-sky-400/30 bg-[#2D0D25]/95 backdrop-blur-xl p-2.5 text-[10px] sm:text-[11px] text-sky-100 shadow-2xl pointer-events-auto animate-in fade-in slide-in-from-right-3">
+            <div className="flex items-start gap-2">
+              <div className="mt-1 flex-shrink-0 w-1 h-1 rounded-full bg-sky-400 shadow-[0_0_5px_#38bdf8]" />
+              <p className="leading-tight opacity-90">
+                {currentPosition.position} is blank. You can still select a
+                candidate.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
 
       <Footer />
     </div>
