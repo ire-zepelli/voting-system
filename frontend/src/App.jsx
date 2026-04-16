@@ -33,7 +33,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/results" element={<Results />} />
+            <Route
+              path="/results"
+              element={
+                <ProtectedRoute>
+                  <Results />
+                </ProtectedRoute>
+              }
+            />
 
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Navigate to="/login" replace />} />
