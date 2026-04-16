@@ -4,6 +4,7 @@ export default function CandidateCard({
   name,
   fname,
   lname,
+  partylist,
   image,
   isSelected,
   onClick,
@@ -38,8 +39,8 @@ export default function CandidateCard({
         style={{ height: "65%" }}
       >
         {/* Name section - Compact for shorter height */}
-        <div className="mt-auto pb-4 sm:pb-6 md:pb-8 w-full px-6">
-          <h1
+        <div className="mt-auto pb-1 sm:pb-2 md:pb-3 w-full px-6">
+          <div
             className={`w-full font-thin tracking-wide leading-tight ${
               isSelected ? "text-black font-normal" : "text-white"
             }`}
@@ -47,20 +48,29 @@ export default function CandidateCard({
             <div className="flex flex-col gap-0.5 w-full">
               <span 
                 style={{ fontSize: "clamp(0.85rem, 2.2vw, 1.2rem)" }} 
-                className="font-medium tracking-tight"
+                className="font-medium tracking-tight uppercase"
               >
                 {firstName}
               </span>
               {lastName && (
                 <span 
                   style={{ fontSize: "clamp(0.85rem, 2.2vw, 1.2rem)" }} 
-                  className="font-medium tracking-tight"
+                  className="font-medium tracking-tight uppercase"
                 >
                   {lastName}
                 </span>
               )}
+              {partylist && (
+                <span 
+                  className={`text-[10px] sm:text-[11px] md:text-[12px] uppercase font-bold tracking-[0.2em] mt-1.5 opacity-90 ${
+                    isSelected ? "text-black/70" : "text-[#FFA700]"
+                  }`}
+                >
+                  {partylist}
+                </span>
+              )}
             </div>
-          </h1>
+          </div>
         </div>
       </div>
 

@@ -36,6 +36,7 @@ export default function CandidatesBanner({
             name={candidate.name}
             fname={candidate.fname}
             lname={candidate.lname}
+            partylist={candidate.partylist}
             image={candidate.image}
             isSelected={selectedCandidateId === candidate.id}
             onClick={() => onSelectCandidate(candidate.id)}
