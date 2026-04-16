@@ -48,18 +48,22 @@ function Header() {
         >
           Candidates
         </Link>
-        <Link
-          to="/voting"
-          className={navLinkClass}
-        >
-          Voting
-        </Link>
-        <Link
-          to="/results"
-          className={navLinkClass}
-        >
-          Results
-        </Link>
+        {isAuthenticated && (
+          <>
+            <Link
+              to="/voting"
+              className={navLinkClass}
+            >
+              Voting
+            </Link>
+            <Link
+              to="/results"
+              className={navLinkClass}
+            >
+              Results
+            </Link>
+          </>
+        )}
 
         <div className="ml-auto flex items-center gap-4">
           {isAuthenticated ? (
@@ -79,9 +83,6 @@ function Header() {
             <>
               <Link to="/login" className={navLinkClass}>
                 Login
-              </Link>
-              <Link to="/register" className={navLinkClass}>
-                Register
               </Link>
             </>
           )}
@@ -141,20 +142,24 @@ function Header() {
         >
           Candidates
         </Link>
-        <Link
-          to="/voting"
-          onClick={() => setMenuOpen(false)}
-          className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
-        >
-          Voting
-        </Link>
-        <Link
-          to="/results"
-          onClick={() => setMenuOpen(false)}
-          className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
-        >
-          Results
-        </Link>
+        {isAuthenticated && (
+          <>
+            <Link
+              to="/voting"
+              onClick={() => setMenuOpen(false)}
+              className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
+            >
+              Voting
+            </Link>
+            <Link
+              to="/results"
+              onClick={() => setMenuOpen(false)}
+              className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
+            >
+              Results
+            </Link>
+          </>
+        )}
 
         {isAuthenticated ? (
           <>

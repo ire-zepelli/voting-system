@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import Footer from "../components/Footer";
+import { useAuth } from "../context/useAuth";
 
 import ccsLogo from "../assets/uclmccs.png";
 import uclmpsits from "../assets/uclmpsits.png";
@@ -11,6 +12,7 @@ const WORDS = ["RIGHTS", "PASSION", "FUTURE", "DREAMS"];
 
 export default function Landing() {
   const [wordIndex, setWordIndex] = useState(0);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -62,7 +64,7 @@ export default function Landing() {
             </div>
 
             <div className="pt-8 w-full sm:w-auto">
-              <Link to="/voting" className="inline-block w-full sm:w-[50%]">
+              <Link to={isAuthenticated ? "/voting" : "/login"} className="inline-block w-full sm:w-[50%]">
                 <Button className="" style={{ fontFamily: '"Helvetica Neue", Helvetica, sans-serif' }}>
                   VOTE NOW
                 </Button>
