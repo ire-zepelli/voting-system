@@ -10,17 +10,12 @@ function isValidStudentId(studentId) {
   return studentIdPattern.test(studentId);
 }
 
-function isValidPassword(password = "") {
-  return typeof password === "string" && password.trim().length >= 6;
-}
-
 function isValidCandidateIds(candidateIds) {
   return Array.isArray(candidateIds) && candidateIds.every((candidateId) => uuidPattern.test(candidateId));
 }
 
 module.exports = {
   isValidCandidateIds,
-  isValidPassword,
   isValidStudentId,
   normalizeStudentId,
 };

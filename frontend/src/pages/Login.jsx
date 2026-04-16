@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -12,10 +12,7 @@ export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, isLoading, login } = useAuth();
-  const [formData, setFormData] = useState({
-    studentId: "",
-    password: "",
-  });
+  const [studentId, setStudentId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const path = location.pathname;
@@ -29,25 +26,23 @@ export default function Login() {
   }
 
   function handleChange(event) {
-    const { id, value } = event.target;
-
     setErrorMessage("");
-    setFormData((current) => ({
-      ...current,
-      [id]: id === "studentId" ? value.replace(/\D/g, "").slice(0, 8) : value,
-    }));
+    setStudentId(event.target.value.replace(/\D/g, "").slice(0, 8));
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     setErrorMessage("");
+
+    if (studentId.length !== 8) {
+      setErrorMessage("Student ID must be exactly 8 digits.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      await login({
-        studentId: formData.studentId,
-        password: formData.password,
-      });
+      await login({ studentId });
 
       navigate("/", { replace: true });
     } catch (error) {
@@ -78,20 +73,15 @@ export default function Login() {
                   type="text"
                   inputMode="numeric"
                   maxLength={8}
-                  value={formData.studentId}
+                  value={studentId}
                   onChange={handleChange}
                   placeholder="Enter your 8-digit student ID"
-                  autoComplete="off"
+                  autoComplete="username"
                 />
-                <Input
-                  label="Password"
-                  id="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  autoComplete="off"
-                />
+
+                <p className="text-xs text-white/65 mb-6 mt-1">
+                  No registration is needed. Enter your ID number to sign in, and first-time voters will be added automatically.
+                </p>
 
                 <p className="text-xs text-white/65 mb-6 mt-1">
                   Your session stays active on this browser until you log out.
@@ -105,17 +95,10 @@ export default function Login() {
 
                 <Button
                   type="submit"
-                  disabled={isSubmitting || formData.studentId.length !== 8 || !formData.password}
+                  disabled={isSubmitting || studentId.length !== 8}
                 >
                   {isSubmitting ? "Signing In..." : "Login"}
                 </Button>
-                
-                <div className="mt-8 text-center text-sm text-white/80">
-                  Don't have an account?{' '}
-                  <Link to="/register" className="text-[#FFA700] hover:text-[#E58000] hover:underline transition-colors font-medium">
-                    Register
-                  </Link>
-                </div>
               </form>
             </>
           )}
