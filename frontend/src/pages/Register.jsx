@@ -90,7 +90,7 @@ export default function Register() {
               value={formData.studentId}
               onChange={handleChange}
               placeholder="Enter your 8-digit student ID"
-              autoComplete="username"
+              autoComplete="off"
             />
             <Input
               label="Password"
@@ -99,7 +99,7 @@ export default function Register() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Create a password"
-              autoComplete="new-password"
+              autoComplete="off"
             />
             <Input
               label="Confirm Password"
@@ -108,7 +108,7 @@ export default function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Confirm your password"
-              autoComplete="new-password"
+              autoComplete="off"
             />
 
             {errorMessage && (

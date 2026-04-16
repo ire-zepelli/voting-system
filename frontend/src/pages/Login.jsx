@@ -81,7 +81,7 @@ export default function Login() {
                   value={formData.studentId}
                   onChange={handleChange}
                   placeholder="Enter your 8-digit student ID"
-                  autoComplete="username"
+                  autoComplete="off"
                 />
                 <Input
                   label="Password"
@@ -90,7 +90,7 @@ export default function Login() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Enter your password"
-                  autoComplete="current-password"
+                  autoComplete="off"
                 />
 
                 <p className="text-xs text-white/65 mb-6 mt-1">
