@@ -95,7 +95,6 @@ export function AuthProvider({ children }) {
     isLoading,
     isAuthenticated: Boolean(token && user),
     login: (credentials) => authenticate("/api/auth/login", credentials),
-    register: (credentials) => authenticate("/api/auth/register", credentials),
     refreshUser,
     updateUser: setUser,
     logout,

@@ -183,13 +183,6 @@ function Header() {
             >
               Login
             </Link>
-            <Link
-              to="/register"
-              onClick={() => setMenuOpen(false)}
-              className="text-[16px] hover:text-[#FFA700] transition-colors duration-300"
-            >
-              Register
-            </Link>
           </>
         )}
       </div>
