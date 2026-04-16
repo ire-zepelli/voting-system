@@ -26,7 +26,8 @@ body {
 
 /* Base styles for the dark purple background that matches the design */
 body {
-  background-color: #34102A; /* Dark purple */
+  background-color: #34102A;
+  /* Dark purple */
   overflow-x: hidden;
 }
 
@@ -39,8 +40,28 @@ body {
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 149, 0, 0.4);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 149, 0, 0.7);
 }
