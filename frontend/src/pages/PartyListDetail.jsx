@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import MemberCardRow from "../components/partylist/MemberCardRow";
 import Footer from "../components/Footer";
-import PosterCard from "../components/Candidate-Poster/PosterCard";
+const PosterCard = lazy(() => import("../components/Candidate-Poster/PosterCard"));
 import { BEATScandidates, PEAKcandidates } from "../components/Candidate-Poster/CandidateInfo";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -330,7 +330,7 @@ function ActionButton({ text, onClick }) {
 function ImageModal({ src, alt, isOpen, onClose }) {
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
@@ -399,7 +399,8 @@ function ImageModal({ src, alt, isOpen, onClose }) {
           animation: "imgZoom 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       />
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -428,7 +429,7 @@ function CarouselModal({ images, isOpen, onClose }) {
   const next = (e) => { e.stopPropagation(); setCurrent((current + 1) % images.length); };
   const prev = (e) => { e.stopPropagation(); setCurrent((current - 1 + images.length) % images.length); };
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
@@ -581,7 +582,8 @@ function CarouselModal({ images, isOpen, onClose }) {
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
         </button>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -604,19 +606,32 @@ export default function PartyListDetail() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Handle Escape key for modals
+  const [popupData, setPopupData] = useState(null);
+
+  // Handle Escape key for modals and popups
   React.useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
         setIsOrgModalOpen(false);
         setIsPlatformModalOpen(false);
+        setPopupData(null);
       }
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  const [popupData, setPopupData] = useState(null);
+  // Prevent background scrolling when a modal or popup is open
+  React.useEffect(() => {
+    if (popupData || isOrgModalOpen || isPlatformModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [popupData, isOrgModalOpen, isPlatformModalOpen]);
 
   const handleMemberClick = (member) => {
     const candidates = partyId === "beats" ? BEATScandidates : PEAKcandidates;
@@ -767,7 +782,7 @@ export default function PartyListDetail() {
       />
 
       {/* Popup Overlay */}
-      {popupData && (
+      {popupData && createPortal(
         <div
           className="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-8"
           onClick={() => setPopupData(null)}
@@ -794,13 +809,15 @@ export default function PartyListDetail() {
             {/* Styling Wrapper for PosterCard */}
             <div className="w-full h-full rounded-[2.5rem] overflow-hidden p-[2px] bg-gradient-to-br from-[#ff9500]/40 via-[#d13a8b]/30 to-[#3B0B2E]/50 shadow-[0_30px_70px_rgba(0,0,0,0.7)] flex">
               <div className="w-full h-full rounded-[2.4rem] overflow-hidden bg-[#2c0620] flex">
-                <PosterCard
-                  className="w-full h-full m-0 !rounded-none !shadow-none !bg-transparent overflow-y-auto overflow-x-hidden"
-                  name={popupData.name}
-                  description={popupData.description}
-                  pdfLink={popupData.pdfLink}
-                  image={popupData.poster || popupData.photo}
-                />
+                <Suspense fallback={<div style={{ margin: "auto", color: "rgba(255,255,255,0.7)", fontFamily: "Inter", fontSize: "1.2rem" }}>Loading candidate details...</div>}>
+                  <PosterCard
+                    className="w-full h-full m-0 !rounded-none !shadow-none !bg-transparent overflow-y-auto overflow-x-hidden custom-scrollbar"
+                    name={popupData.name}
+                    description={popupData.description}
+                    pdfLink={popupData.pdfLink}
+                    image={popupData.poster || popupData.photo}
+                  />
+                </Suspense>
               </div>
             </div>
           </div>
@@ -815,7 +832,8 @@ export default function PartyListDetail() {
                to { opacity: 1; transform: scale(1) translateY(0); }
             }
           `}</style>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -38,8 +38,8 @@ export default function PosterCard({ title, name, description, pdfLink, image, c
                 </div>
 
                 {/* Info Text Area */}
-                <div className='flex flex-col flex-1 pb-6'>
-                    <h2 className='text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] tracking-wide mb-4'>
+                <div className='flex flex-col flex-1'>
+                    <h2 className='text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] tracking-tighter mb-4'>
                         {name}
                     </h2>
 
@@ -50,19 +50,22 @@ export default function PosterCard({ title, name, description, pdfLink, image, c
                         {description}
                     </p>
 
-                    {pdfLink && (
-                        <a
-                            href={pdfLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className='mt-auto ml-auto mb-10 sm:mb-12 shrink-0 px-6 py-2.5 bg-gradient-to-r from-[#ff9500] to-[#d48108] text-black font-extrabold text-sm sm:text-base tracking-wide rounded-full hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(255,149,0,0.4)] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 w-max'
-                        >
-                            View Credentials
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                        </a>
-                    )}
+                    <div className='mt-auto w-full flex justify-end pb-5'>
+                        {pdfLink && (
+                            <a
+                                href={pdfLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className='shrink-0 px-6 py-2.5 bg-gradient-to-r from-[#ff9500] to-[#d48108] text-black font-extrabold text-sm sm:text-base tracking-wide rounded-full hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(255,149,0,0.4)] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 w-max'
+                            >
+                                View Credentials
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        )}
+                    </div>
+
                 </div>
 
             </div>
