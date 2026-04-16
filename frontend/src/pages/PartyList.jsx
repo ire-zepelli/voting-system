@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -46,8 +46,8 @@ function ArrowButton({ direction, onClick, disabled }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: "3.2rem",
-        height: "3.2rem",
+        width: "2.6rem",
+        height: "2.6rem",
         borderRadius: "50%",
         border: "1px solid rgba(255,255,255,0.2)",
         background: hov ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.07)",
@@ -61,11 +61,11 @@ function ArrowButton({ direction, onClick, disabled }) {
       aria-label={direction === "left" ? "Previous party" : "Next party"}
     >
       {direction === "left" ? (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="15 18 9 12 15 6" />
         </svg>
       ) : (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="9 18 15 12 9 6" />
         </svg>
       )}
@@ -219,11 +219,19 @@ function CarouselSlide({ party, active, onClick }) {
 // ─── Main page ────────────────────────────────────────────────────────────────
 export const PartyList = () => {
   const [current, setCurrent] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   const total = PARTYLISTS.length;
 
   const prev = () => setCurrent(c => (c - 1 + total) % total);
   const next = () => setCurrent(c => (c + 1) % total);
+
+  // Auto-rotate effect: switches slide every 2 seconds, pauses on hover
+  useEffect(() => {
+    if (total <= 1 || isHovered) return;
+    const interval = setInterval(next, 2000);
+    return () => clearInterval(interval);
+  }, [current, total, isHovered]);
 
   return (
     <>
@@ -256,7 +264,11 @@ export const PartyList = () => {
         </div>
 
         {/* Carousel area */}
-        <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+        <div
+          style={{ flex: 1, position: "relative", overflow: "hidden" }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           {PARTYLISTS.map((party, idx) => (
             <CarouselSlide
               key={party.id}
@@ -269,7 +281,7 @@ export const PartyList = () => {
           {/* Left / Right controls */}
           <div style={{
             position: "absolute",
-            bottom: "2rem",
+            bottom: "1.2rem",
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 30,
@@ -287,8 +299,8 @@ export const PartyList = () => {
                   onClick={() => setCurrent(idx)}
                   aria-label={`Go to ${party.label}`}
                   style={{
-                    width: idx === current ? "1.8rem" : "0.5rem",
-                    height: "0.5rem",
+                    width: idx === current ? "1.4rem" : "0.4rem",
+                    height: "0.4rem",
                     borderRadius: "9999px",
                     background: idx === current ? "#fff" : "rgba(255,255,255,0.35)",
                     border: "none",
