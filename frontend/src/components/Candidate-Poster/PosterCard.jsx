@@ -38,19 +38,11 @@ export default function PosterCard({ title, name, description, pdfLink, image, c
                 </div>
 
                 {/* Info Text Area */}
-                <div className='flex flex-col flex-1'>
+                <div className='flex flex-col'>
                     <h2 className='text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] tracking-tighter mb-4'>
                         {name}
                     </h2>
-
-                    {/* Decorative separator */}
-                    <div className='w-24 h-2 bg-gradient-to-r from-[#ff9500] to-[#d13a8b] rounded-full mb-8 shadow-[0_0_10px_rgba(255,149,0,0.6)]'></div>
-
-                    <p className='text-2xl sm:text-3xl text-white/80 font-light leading-relaxed mb-10'>
-                        {description}
-                    </p>
-
-                    <div className='mt-auto w-full flex justify-end pb-5'>
+                    <div className='w-full flex justify-start pb-5'>
                         {pdfLink && (
                             <a
                                 href={pdfLink}
@@ -66,9 +58,16 @@ export default function PosterCard({ title, name, description, pdfLink, image, c
                         )}
                     </div>
 
-                </div>
+                    {/* Decorative separator */}
+                    <div className='w-24 h-2 p-1 bg-gradient-to-r from-[#ff9500] to-[#d13a8b] rounded-full mb-6 shadow-[0_0_10px_rgba(255,149,0,0.6)]'></div>
 
+                    <p className='text-2xl sm:text-2xl text-white/80 font-light leading-relaxed mb-6'>
+                        {description}
+                    </p>
+
+                </div>
             </div>
+
         </div>
     )
 }
