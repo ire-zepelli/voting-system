@@ -74,9 +74,9 @@ function ArrowButton({ direction, onClick, disabled }) {
 }
 
 // ─── Carousel slide ───────────────────────────────────────────────────────────
-function CarouselSlide({ party, active, onClick }) {
+function CarouselSlide({ party, active, onClick, isMobile }) {
   const [hovered, setHovered] = useState(false);
-  const T = "all 0.75s cubic-bezier(0.25, 1, 0.5, 1)";
+  const T = "all 1.2s cubic-bezier(0.25, 1, 0.5, 1)";
 
   return (
     <div
@@ -102,13 +102,13 @@ function CarouselSlide({ party, active, onClick }) {
         style={{
           position: "absolute",
           top: "50%",
-          left: "2rem",
+          left: isMobile ? "1rem" : "2rem",
           transform: hovered
-            ? "translate(10%, -50%) scale(2.2)"
+            ? (isMobile ? "translate(0, -50%) scale(1.15)" : "translate(10%, -50%) scale(2.2)")
             : "translate(0%, -50%) scale(1)",
           transformOrigin: "left center",
           zIndex: hovered ? 1 : 10,
-          fontSize: "clamp(6rem, 18vw, 14rem)",
+          fontSize: isMobile ? "clamp(3rem, 15vw, 6rem)" : "clamp(6rem, 18vw, 14rem)",
           fontWeight: "bold",
           fontFamily: "Inter, sans-serif",
           color: hovered ? "rgba(255,255,255,0.06)" : "#ffffff",
@@ -130,11 +130,11 @@ function CarouselSlide({ party, active, onClick }) {
           position: "absolute",
           right: 0,
           bottom: 0,
-          width: hovered ? "100%" : "60%",
+          width: hovered ? "100%" : (isMobile ? "100%" : "60%"),
           height: "100%",
           zIndex: hovered ? 10 : 1,
           display: "flex",
-          justifyContent: hovered ? "center" : "flex-end",
+          justifyContent: (hovered || isMobile) ? "center" : "flex-end",
           transition: "width 0.75s cubic-bezier(0.25, 1, 0.5, 1)",
           willChange: "width",
           pointerEvents: "none"
@@ -148,10 +148,10 @@ function CarouselSlide({ party, active, onClick }) {
               height: hovered
                 ? `${115 * (party.imageScale ?? 1)}%`
                 : `${108 * (party.imageScale ?? 1)}%`,
-              width: hovered ? "80%" : "100%",
+              width: (hovered || isMobile) ? "95%" : "100%",
               objectFit: "contain",
               objectPosition: "bottom center",
-              opacity: hovered ? 1 : 0.45,
+              opacity: hovered ? 1 : (isMobile ? 0.25 : 0.45),
               transform: hovered
                 ? `scale(1.05) translateY(${party.imageHoverOffsetY ?? "0%"})`
                 : `scale(1) translateY(${party.imageOffsetY ?? "0%"})`,
@@ -186,8 +186,8 @@ function CarouselSlide({ party, active, onClick }) {
       <div
         style={{
           position: "absolute",
-          bottom: "2.5rem",
-          left: "2rem",
+          bottom: isMobile ? "4.5rem" : "2.5rem",
+          left: isMobile ? "1rem" : "2rem",
           zIndex: 20,
           display: "flex",
           alignItems: "center",
@@ -220,8 +220,16 @@ function CarouselSlide({ party, active, onClick }) {
 export const PartyList = () => {
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const total = PARTYLISTS.length;
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const prev = () => setCurrent(c => (c - 1 + total) % total);
   const next = () => setCurrent(c => (c + 1) % total);
@@ -250,10 +258,10 @@ export const PartyList = () => {
         </div>
 
         {/* Title bar */}
-        <div style={{ padding: "1rem 2rem 0.75rem", flexShrink: 0, position: "relative", zIndex: 40 }}>
+        <div style={{ padding: isMobile ? "1rem 1rem 0.5rem" : "1rem 2rem 0.75rem", flexShrink: 0, position: "relative", zIndex: 40 }}>
           <h1 style={{
             margin: 0,
-            fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
+            fontSize: isMobile ? "clamp(1.4rem, 5vw, 2rem)" : "clamp(1.6rem, 3vw, 2.4rem)",
             fontWeight: 700,
             color: "#fff",
             letterSpacing: "-0.03em",
@@ -275,6 +283,7 @@ export const PartyList = () => {
               party={party}
               active={idx === current}
               onClick={() => navigate(`/partylist/${party.id}`)}
+              isMobile={isMobile}
             />
           ))}
 
