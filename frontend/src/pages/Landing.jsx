@@ -14,7 +14,11 @@ export default function Landing() {
   const [wordIndex, setWordIndex] = useState(0);
   const { isAuthenticated } = useAuth();
 
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
     const targetDate = new Date("2026-04-17T17:30:00+08:00").getTime();
@@ -28,7 +32,9 @@ export default function Landing() {
         setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
       } else {
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) + days * 24;
+        const hours =
+          Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) +
+          days * 24;
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
         setTimeLeft({ hours, minutes, seconds });
@@ -45,11 +51,14 @@ export default function Landing() {
     return () => clearInterval(wordInterval);
   }, []);
 
-
   return (
     <div className="flex flex-col min-h-screen bg-[#34102A] text-white w-full overflow-x-hidden relative">
       <div className="absolute top-[30%] sm:top-1/4 bottom-0 right-0 w-full sm:w-2/3 lg:w-[60%] pointer-events-none z-0">
-        <img src="/rizal.png" alt="" className="w-full h-full object-contain sm:object-cover object-bottom sm:object-right-bottom opacity-[0.25] sm:opacity-50 select-none mix-blend-luminosity" />
+        <img
+          src="/rizal.png"
+          alt=""
+          className="w-full h-full object-contain sm:object-cover object-bottom sm:object-right-bottom opacity-[0.25] sm:opacity-50 select-none mix-blend-luminosity"
+        />
         <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#34102A]/40 to-[#34102A]"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#34102A] via-transparent to-transparent"></div>
       </div>
@@ -60,11 +69,22 @@ export default function Landing() {
           <section className="space-y-0 lg:pr-8 pt-2">
             {/* Logos */}
             <div className="flex items-center gap-3 mb-0">
-              <img src={ccsLogo} alt="CCS Logo" className="h-14 w-auto object-contain" />
-              <img src={uclmpsits} alt="UCLM PSITS Logo" className="h-14 w-auto object-contain" />
+              <img
+                src={ccsLogo}
+                alt="CCS Logo"
+                className="h-14 w-auto object-contain"
+              />
+              <img
+                src={uclmpsits}
+                alt="UCLM PSITS Logo"
+                className="h-14 w-auto object-contain"
+              />
             </div>
 
-            <h2 className="text-2xl sm:text-3xl tracking-normal font-semibold text-white mt-0 mb-0 leading-tight" style={{ fontFamily: "Inter, sans-serif" }}>
+            <h2
+              className="text-2xl sm:text-3xl tracking-normal font-semibold text-white mt-0 mb-0 leading-tight"
+              style={{ fontFamily: "Inter, sans-serif" }}
+            >
               2026 Student Election
             </h2>
 
@@ -78,7 +98,7 @@ export default function Landing() {
                     style={{
                       WebkitTextStroke: "2px rgba(255, 255, 255, 0.25)",
                       color: "transparent",
-                      transform: "translate(30%, 40%)",
+                      transform: "translate(60%, 40%)",
                     }}
                   >
                     {word}
@@ -95,8 +115,16 @@ export default function Landing() {
             </div>
 
             <div className="pt-8 w-full sm:w-auto">
-              <Link to={isAuthenticated ? "/voting" : "/login"} className="inline-block w-full sm:w-[50%]">
-                <Button className="" style={{ fontFamily: '"Helvetica Neue", Helvetica, sans-serif' }}>
+              <Link
+                to={isAuthenticated ? "/voting" : "/login"}
+                className="inline-block w-full sm:w-[50%]"
+              >
+                <Button
+                  className=""
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                  }}
+                >
                   VOTE NOW
                 </Button>
               </Link>
@@ -114,28 +142,37 @@ export default function Landing() {
               }}
             >
               <div className="flex flex-col text-white relative z-10 w-full">
-                <p className="text-sm font-semibold text-white mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
+                <p
+                  className="text-sm font-semibold text-white mb-4"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
                   Election ends in:
                 </p>
 
                 <div className="flex justify-between items-center gap-3 sm:gap-4 mt-2">
                   <div className="flex flex-col items-center flex-1">
                     <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">
-                      {String(timeLeft.hours).padStart(2, '0')}
+                      {String(timeLeft.hours).padStart(2, "0")}
                     </p>
-                    <p className="text-sm font-helvetica italic font-medium">Hours</p>
+                    <p className="text-sm font-helvetica italic font-medium">
+                      Hours
+                    </p>
                   </div>
                   <div className="flex flex-col items-center flex-1">
                     <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">
-                      {String(timeLeft.minutes).padStart(2, '0')}
+                      {String(timeLeft.minutes).padStart(2, "0")}
                     </p>
-                    <p className="text-sm font-helvetica italic font-medium">Minutes</p>
+                    <p className="text-sm font-helvetica italic font-medium">
+                      Minutes
+                    </p>
                   </div>
                   <div className="flex flex-col items-center flex-1">
                     <p className="text-5xl sm:text-[4rem] font-bold font-helvetica italic tracking-tight mb-1 text-white">
-                      {String(timeLeft.seconds).padStart(2, '0')}
+                      {String(timeLeft.seconds).padStart(2, "0")}
                     </p>
-                    <p className="text-sm font-helvetica italic font-medium">Seconds</p>
+                    <p className="text-sm font-helvetica italic font-medium">
+                      Seconds
+                    </p>
                   </div>
                 </div>
               </div>
