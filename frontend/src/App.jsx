@@ -7,6 +7,7 @@ const PartyList = lazy(() => import("./pages/PartyList").then(m => ({ default: m
 const PartyListDetail = lazy(() => import("./pages/PartyListDetail"));
 import Results from "./pages/Results";
 import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 
@@ -43,6 +44,7 @@ function App() {
             />
 
             <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Navigate to="/login" replace />} />
             <Route path="/login/not-signed-in" element={<Login />} />
             <Route path="/login/timerexpired" element={<Login />} />
