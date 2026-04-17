@@ -261,12 +261,62 @@ export default function Voting() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { token, updateUser, user } = useAuth();
-  const [selectedVotes, setSelectedVotes] = useState({});
-  const [skippedPositions, setSkippedPositions] = useState({});
-  const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
+  const storageKey = user?.id ? `voting-progress-${user.id}` : null;
+
+  // Load progress from localStorage on initialization
+  const [selectedVotes, setSelectedVotes] = useState(() => {
+    if (!storageKey) return {};
+    const saved = localStorage.getItem(`${storageKey}-votes`);
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  const [skippedPositions, setSkippedPositions] = useState(() => {
+    if (!storageKey) return {};
+    const saved = localStorage.getItem(`${storageKey}-skipped`);
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  const [currentPositionIndex, setCurrentPositionIndex] = useState(() => {
+    if (!storageKey) return 0;
+    const saved = localStorage.getItem(`${storageKey}-index`);
+    return saved ? parseInt(saved, 10) : 0;
+  });
+
   const [statusMessage, setStatusMessage] = useState("");
   const [confirmationState, setConfirmationState] = useState(null);
-  const [isReviewingVotes, setIsReviewingVotes] = useState(false);
+  const [isReviewingVotes, setIsReviewingVotes] = useState(() => {
+    if (!storageKey) return false;
+    const saved = localStorage.getItem(`${storageKey}-reviewing`);
+    return saved === "true";
+  });
+
+  // Persist progress to localStorage whenever it changes
+  useEffect(() => {
+    if (storageKey) {
+      localStorage.setItem(`${storageKey}-votes`, JSON.stringify(selectedVotes));
+    }
+  }, [selectedVotes, storageKey]);
+
+  useEffect(() => {
+    if (storageKey) {
+      localStorage.setItem(
+        `${storageKey}-skipped`,
+        JSON.stringify(skippedPositions),
+      );
+    }
+  }, [skippedPositions, storageKey]);
+
+  useEffect(() => {
+    if (storageKey) {
+      localStorage.setItem(`${storageKey}-index`, currentPositionIndex.toString());
+    }
+  }, [currentPositionIndex, storageKey]);
+
+  useEffect(() => {
+    if (storageKey) {
+      localStorage.setItem(`${storageKey}-reviewing`, isReviewingVotes.toString());
+    }
+  }, [isReviewingVotes, storageKey]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["candidates"],
@@ -310,6 +360,13 @@ export default function Voting() {
     currentPosition && skippedPositions[currentPosition.position],
   );
 
+  // Validation: Ensure currentPositionIndex is within bounds if positions list changes
+  useEffect(() => {
+    if (positions.length > 0 && currentPositionIndex >= positions.length) {
+      setCurrentPositionIndex(0);
+    }
+  }, [positions.length, currentPositionIndex]);
+
   const voteMutation = useMutation({
     mutationFn: (candidateIds) =>
       apiRequest("/api/votes", {
@@ -318,6 +375,13 @@ export default function Voting() {
         body: { candidateIds },
       }),
     onSuccess: (response) => {
+      // Clear persistence on success
+      if (storageKey) {
+        localStorage.removeItem(`${storageKey}-votes`);
+        localStorage.removeItem(`${storageKey}-skipped`);
+        localStorage.removeItem(`${storageKey}-index`);
+        localStorage.removeItem(`${storageKey}-reviewing`);
+      }
       updateUser(response.user);
       queryClient.invalidateQueries({ queryKey: ["results"] });
       navigate("/results", { replace: true });
