@@ -164,7 +164,7 @@ export const PARTY_MEMBER_SECTIONS = {
       title: "CHIEFS",
       members: [
         {
-          name: "Jea Mary Trixy Magalland",
+          name: "Jea Mary Trixy Magallano",
           position: "Public Information Officer",
           photo:
             "/PEAK/PEAK NO BACKGROUND INDIVIDUAL/P.I OFFICER- MAGALLANO.png",
