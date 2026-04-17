@@ -54,11 +54,18 @@ const MobileWarning = () => (
 
 function App() {
   const location = useLocation();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  
+  const checkIsMobile = () => {
+    const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isSmallScreen = window.innerWidth < 1024;
+    return isMobileUA || isSmallScreen;
+  };
+
+  const [isMobile, setIsMobile] = useState(checkIsMobile());
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(checkIsMobile());
     };
 
     window.addEventListener("resize", handleResize);
