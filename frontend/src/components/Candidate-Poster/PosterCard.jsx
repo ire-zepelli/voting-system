@@ -5,6 +5,7 @@ import PSITS from '../../assets/uclmpsits.png'
 
 export default function PosterCard({ title, name, description, pdfLink, image, className }) {
     const [showPdf, setShowPdf] = useState(false);
+    const [iframeLoaded, setIframeLoaded] = useState(false);
 
     const getEmbedUrl = (url) => {
         if (!url) return '';
@@ -19,7 +20,7 @@ export default function PosterCard({ title, name, description, pdfLink, image, c
         <div className={`flex flex-col text-white p-6 sm:p-10 rounded-[2rem] shadow-2xl bg-gradient-to-b from-[#3B0B2E] to-[#200518] border border-white/5 ${className || 'ml-20 w-11/12'}`}>
             {/* Header: Logos & Title */}
             <div className='flex justify-between items-center mb-8 border-b border-white/10 pb-6 shrink-0'>
-                <div className='flex gap-4' onClick={() => setShowPdf(false)} style={{ cursor: showPdf ? 'pointer' : 'default' }}>
+                <div className='flex gap-4' onClick={() => { setShowPdf(false); setIframeLoaded(false); }} style={{ cursor: showPdf ? 'pointer' : 'default' }}>
                     <img src={CCS} alt="UCLM CCS Logo" className='w-16 h-auto drop-shadow-md' />
                     <img src={PSITS} alt="UCLM PSITS Logo" className='w-16 h-auto drop-shadow-md' />
                 </div>
@@ -31,7 +32,7 @@ export default function PosterCard({ title, name, description, pdfLink, image, c
                 <div className='w-32 flex justify-end'>
                     {showPdf && (
                         <button
-                            onClick={() => setShowPdf(false)}
+                            onClick={() => { setShowPdf(false); setIframeLoaded(false); }}
                             className='px-4 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all'
                         >
                             ← Info
@@ -43,12 +44,22 @@ export default function PosterCard({ title, name, description, pdfLink, image, c
 
             {/* Main Content Area */}
             {showPdf ? (
-                <div className='flex-1 w-full min-h-[400px] rounded-3xl overflow-hidden border border-white/10 bg-black/40 flex items-center justify-center'>
+                <div className='flex-1 w-full min-h-[400px] rounded-3xl overflow-hidden border border-white/10 bg-black/40 flex items-center justify-center relative shadow-inner'>
+                    {!iframeLoaded && (
+                        <div className="absolute inset-0 flex items-center justify-center z-0">
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="w-10 h-10 border-[3px] border-white/5 border-t-[#ff9500] rounded-full animate-spin"></div>
+                                <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Securely Loading</span>
+                            </div>
+                        </div>
+                    )}
                     <iframe
                         src={getEmbedUrl(pdfLink)}
-                        className="w-full h-full border-none min-h-[50vh] bg-transparent"
+                        className={`w-full h-full border-none min-h-[50vh] bg-transparent transition-opacity duration-700 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
                         title={`${name} Credentials`}
                         allow="autoplay"
+                        loading="lazy"
+                        onLoad={() => setIframeLoaded(true)}
                     />
                 </div>
             ) : (
@@ -63,6 +74,7 @@ export default function PosterCard({ title, name, description, pdfLink, image, c
                             src={image || sampleImage}
                             alt={`${name}'s poster`}
                             className='relative z-10 w-full h-full rounded-2xl object-cover drop-shadow-[0_20px_30px_rgba(0,0,0,0.9)] group-hover:scale-105 transition-transform duration-500 ease-out'
+                            loading="lazy"
                         />
                     </div>
 
